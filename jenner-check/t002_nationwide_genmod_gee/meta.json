@@ -1,0 +1,7 @@
+{
+  "bundle": "t002_nationwide_genmod_gee",
+  "source_file": "nationwide_genmod_gee_analysis.sas",
+  "source_blob_sha": "3c1435eb95ceb506261168157e8122bfefaa9975",
+  "source_commit": "7b65277565a79389dd0e1b2452acda8bef97bd30",
+  "notes": "Nationwide GEE logistic regression via PROC GENMOD (Models 1, 2, 3a, 3b) with repeated subject=_state, type=exch correlation, Type3 tests and exponentiated ESTIMATE statements. The four GENMOD GEE models and the data-prep/PROC MEANS summary are unchanged from the source; the PROC IMPORT of data/combinedbrfss_18_24v10.csv was replaced with an inline DATA step building the same work.brfss_raw from a synthetic BRFSS-shaped sample (not real CDC data). Captured run covers the model-fitting steps."
+}

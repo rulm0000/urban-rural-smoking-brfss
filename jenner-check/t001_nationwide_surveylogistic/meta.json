@@ -1,0 +1,7 @@
+{
+  "bundle": "t001_nationwide_surveylogistic",
+  "source_file": "Nationwide_analysis.sas",
+  "source_blob_sha": "64328e0f53f0cae2101349ed71b00912a973aa42",
+  "source_commit": "7b65277565a79389dd0e1b2452acda8bef97bd30",
+  "notes": "Nationwide survey-weighted logistic models (current + former smoking, Models 1-3) via PROC SURVEYLOGISTIC with weight/strata/cluster. The six PROC SURVEYLOGISTIC calls are unchanged from the source; only the PROC IMPORT of data/combinedbrfss_18_24v10.csv was replaced with an inline DATA step building the same work.CombinedBRFSS_18_24v10 from a small synthetic BRFSS-shaped sample (not real CDC data)."
+}

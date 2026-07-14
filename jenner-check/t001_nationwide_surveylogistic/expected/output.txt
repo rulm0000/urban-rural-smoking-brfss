@@ -1,0 +1,330 @@
+
+                      The SURVEYLOGISTIC Procedure
+
+  Number of Strata                4
+  Number of Clusters             12
+  Number of Observations         96
+  Number of Events               36
+  Number of Non-Events           60
+  Link Function               logit
+  Variance Method            TAYLOR
+
+                Model Fit Statistics
+
+  -2 Log Likelihood        123.8854
+  AIC                      131.8854
+  SC                       142.1428
+
+                  Analysis of Maximum Likelihood Estimates
+
+Parameter                   Estimate       Std Error     t Value    Pr > |t|
+----------------------------------------------------------------------------
+Intercept                   3.843969  46683883.024428      0.0000      1.0000
+URRU_0.0                   -4.863958  48646647.077158     -0.0000      1.0000
+URRU_1.0                   -4.082703  48646647.077158     -0.0000      1.0000
+year_centered               0.156308        0.172152      0.9080      0.3904
+----------------------------------------------------------------------------
+
+                         Odds Ratio Estimates
+
+Effect                    Odds Ratio
+------------------------------------
+URRU_0.0                      0.0077
+URRU_1.0                      0.0169
+year_centered                 1.1692
+------------------------------------
+
+                       Association of Predicted Probabilities
+
+  Percent Concordant      57.4
+  Percent Discordant      36.1
+  c Statistic           0.6065
+
+                      The SURVEYLOGISTIC Procedure
+
+  Number of Strata                4
+  Number of Clusters             12
+  Number of Observations         96
+  Number of Events               17
+  Number of Non-Events           79
+  Link Function               logit
+  Variance Method            TAYLOR
+
+                Model Fit Statistics
+
+  -2 Log Likelihood        782.8789
+  AIC                      790.8789
+  SC                       801.1363
+
+                  Analysis of Maximum Likelihood Estimates
+
+Parameter                   Estimate       Std Error     t Value    Pr > |t|
+----------------------------------------------------------------------------
+Intercept             10607088921798859624022016.000000                                        
+URRU_0.0              -10607088921798876803891200.000000                                        
+URRU_1.0              -10607088921798876803891200.000000                                        
+year_centered         3256562089.074655                                        
+----------------------------------------------------------------------------
+
+                         Odds Ratio Estimates
+
+Effect                    Odds Ratio
+------------------------------------
+URRU_0.0                      0.0000
+URRU_1.0                      0.0000
+year_centered                       
+------------------------------------
+
+                       Association of Predicted Probabilities
+
+  Percent Concordant       0.0
+  Percent Discordant       0.0
+  c Statistic           0.5000
+
+                      The SURVEYLOGISTIC Procedure
+
+  Number of Strata                4
+  Number of Clusters             12
+  Number of Observations         96
+  Number of Events               36
+  Number of Non-Events           60
+  Link Function               logit
+  Variance Method            TAYLOR
+
+                Model Fit Statistics
+
+  -2 Log Likelihood        113.6066
+  AIC                      139.6066
+  SC                       172.9431
+
+                  Analysis of Maximum Likelihood Estimates
+
+Parameter                   Estimate       Std Error     t Value    Pr > |t|
+----------------------------------------------------------------------------
+Intercept                 -41.829125  40577763.164216     -0.0000      1.0000
+URRU_0.0                   42.062059  23278803.678987      0.0000      1.0000
+URRU_1.0                   42.955065  62095564.968715      0.0000      1.0000
+year_centered               0.195155        0.186559      1.0461      0.3261
+_AGE_G_1.0                 -1.744379        0.862652     -2.0221      0.0778
+_AGE_G_2.0                 -1.550780        0.953855     -1.6258      0.1426
+_AGE_G_3.0                 -1.857330        0.837869     -2.2167      0.0575
+_AGE_G_4.0                 -0.286431        1.001654     -0.2860      0.7822
+_AGE_G_5.0                 -1.356598        0.724831     -1.8716      0.0982
+SEXVAR_1.0                 -0.162121        0.590743     -0.2744      0.7907
+_RACEGR3_1.0               -0.642923        1.018572     -0.6312      0.5455
+_RACEGR3_2.0                0.339005        0.939367      0.3609      0.7275
+_RACEGR3_3.0               -0.366502        0.820515     -0.4467      0.6670
+----------------------------------------------------------------------------
+
+                         Odds Ratio Estimates
+
+Effect                    Odds Ratio
+------------------------------------
+URRU_0.0              1850631575294173696.0000
+URRU_1.0              4520096780269468672.0000
+year_centered                 1.2155
+_AGE_G_1.0                    0.1748
+_AGE_G_2.0                    0.2121
+_AGE_G_3.0                    0.1561
+_AGE_G_4.0                    0.7509
+_AGE_G_5.0                    0.2575
+SEXVAR_1.0                    0.8503
+_RACEGR3_1.0                  0.5258
+_RACEGR3_2.0                  1.4036
+_RACEGR3_3.0                  0.6932
+------------------------------------
+
+                       Association of Predicted Probabilities
+
+  Percent Concordant      73.1
+  Percent Discordant      26.8
+  c Statistic           0.7317
+
+                      The SURVEYLOGISTIC Procedure
+
+  Number of Strata                4
+  Number of Clusters             12
+  Number of Observations         96
+  Number of Events               17
+  Number of Non-Events           79
+  Link Function               logit
+  Variance Method            TAYLOR
+
+                Model Fit Statistics
+
+  -2 Log Likelihood       1427.6028
+  AIC                     1453.6028
+  SC                      1486.9393
+
+                  Analysis of Maximum Likelihood Estimates
+
+Parameter                   Estimate       Std Error     t Value    Pr > |t|
+----------------------------------------------------------------------------
+Intercept             210881380978996639956992.000000  28837107929709628.000000  7312847.7895      0.0000
+URRU_0.0              -210881380978995834650624.000000  23830809237251224.000000  -8849107.0060      0.0000
+URRU_1.0              -210881380978996002422784.000000  29532077694551644.000000  -7140756.6769      0.0000
+year_centered         454038856.848898  381024367.946407      1.1916      0.2676
+_AGE_G_1.0            -1793202328.780525  2702944736.967432     -0.6634      0.5257
+_AGE_G_2.0            -1807734643.825909  1929327806.800765     -0.9370      0.3762
+_AGE_G_3.0            -702174629.191774  3682031084.626236     -0.1907      0.8535
+_AGE_G_4.0            -1608291027.769047  2337702331.271360     -0.6880      0.5109
+_AGE_G_5.0            -1206091300.656036  2543707657.080311     -0.4741      0.6481
+SEXVAR_1.0            -778447060.016045  1543407942.664386     -0.5044      0.6276
+_RACEGR3_1.0          640213880.468771  2483780658.220686      0.2578      0.8031
+_RACEGR3_2.0          -2200724190.437785  1506072725.603909     -1.4612      0.1821
+_RACEGR3_3.0          -1875564323.857601  1510940945.224897     -1.2413      0.2496
+----------------------------------------------------------------------------
+
+                         Odds Ratio Estimates
+
+Effect                    Odds Ratio
+------------------------------------
+URRU_0.0                      0.0000
+URRU_1.0                      0.0000
+year_centered                       
+_AGE_G_1.0                    0.0000
+_AGE_G_2.0                    0.0000
+_AGE_G_3.0                    0.0000
+_AGE_G_4.0                    0.0000
+_AGE_G_5.0                    0.0000
+SEXVAR_1.0                    0.0000
+_RACEGR3_1.0                        
+_RACEGR3_2.0                  0.0000
+_RACEGR3_3.0                  0.0000
+------------------------------------
+
+                       Association of Predicted Probabilities
+
+  Percent Concordant      22.3
+  Percent Discordant      17.0
+  c Statistic           0.5268
+
+                      The SURVEYLOGISTIC Procedure
+
+  Number of Strata                4
+  Number of Clusters             12
+  Number of Observations         96
+  Number of Events               36
+  Number of Non-Events           60
+  Link Function               logit
+  Variance Method            TAYLOR
+
+                Model Fit Statistics
+
+  -2 Log Likelihood        109.0576
+  AIC                      141.0576
+  SC                       182.0872
+
+                  Analysis of Maximum Likelihood Estimates
+
+Parameter                   Estimate       Std Error     t Value    Pr > |t|
+----------------------------------------------------------------------------
+Intercept                  -7.497351                                        
+URRU_0.0                    8.521751                                        
+URRU_1.0                    9.671154                                        
+year_centered               0.184606        0.203071      0.9091      0.3899
+_AGE_G_1.0                 -1.978404        0.948270     -2.0863      0.0704
+_AGE_G_2.0                 -2.180649        1.061102     -2.0551      0.0739
+_AGE_G_3.0                 -2.241569        0.902304     -2.4843      0.0379
+_AGE_G_4.0                 -0.606690        0.980794     -0.6186      0.5534
+_AGE_G_5.0                 -1.498408        0.751934     -1.9927      0.0814
+SEXVAR_1.0                 -0.383662        0.575824     -0.6663      0.5240
+_RACEGR3_1.0               -1.064480        1.035737     -1.0278      0.3341
+_RACEGR3_2.0                0.462638        0.950868      0.4865      0.6396
+_RACEGR3_3.0               -0.580507        0.765114     -0.7587      0.4698
+_EDUCAG_1.0                 0.194038        0.537778      0.3608      0.7276
+_EDUCAG_2.0                -1.049464        0.828653     -1.2665      0.2410
+_EDUCAG_3.0                -0.787475        0.963026     -0.8177      0.4372
+----------------------------------------------------------------------------
+
+                         Odds Ratio Estimates
+
+Effect                    Odds Ratio
+------------------------------------
+URRU_0.0                   5022.8435
+URRU_1.0                  15853.6396
+year_centered                 1.2027
+_AGE_G_1.0                    0.1383
+_AGE_G_2.0                    0.1130
+_AGE_G_3.0                    0.1063
+_AGE_G_4.0                    0.5452
+_AGE_G_5.0                    0.2235
+SEXVAR_1.0                    0.6814
+_RACEGR3_1.0                  0.3449
+_RACEGR3_2.0                  1.5883
+_RACEGR3_3.0                  0.5596
+_EDUCAG_1.0                   1.2141
+_EDUCAG_2.0                   0.3501
+_EDUCAG_3.0                   0.4550
+------------------------------------
+
+                       Association of Predicted Probabilities
+
+  Percent Concordant      76.2
+  Percent Discordant      23.7
+  c Statistic           0.7625
+
+                      The SURVEYLOGISTIC Procedure
+
+  Number of Strata                4
+  Number of Clusters             12
+  Number of Observations         96
+  Number of Events               17
+  Number of Non-Events           79
+  Link Function               logit
+  Variance Method            TAYLOR
+
+                Model Fit Statistics
+
+  -2 Log Likelihood         91.1960
+  AIC                      123.1960
+  SC                       164.2256
+
+                  Analysis of Maximum Likelihood Estimates
+
+Parameter                   Estimate       Std Error     t Value    Pr > |t|
+----------------------------------------------------------------------------
+Intercept                  -1.601425                                        
+URRU_0.0                    0.788262                                        
+URRU_1.0                    0.401115                                        
+year_centered               0.284910        0.165756      1.7188      0.1240
+_AGE_G_1.0                  0.939005        1.045392      0.8982      0.3953
+_AGE_G_2.0                 -1.068518        1.594454     -0.6701      0.5216
+_AGE_G_3.0                 -0.429350        1.567426     -0.2739      0.7911
+_AGE_G_4.0                 -0.116235        1.016202     -0.1144      0.9118
+_AGE_G_5.0                 -1.338910        1.054075     -1.2702      0.2397
+SEXVAR_1.0                 -0.755038        0.924464     -0.8167      0.4377
+_RACEGR3_1.0                0.382554        0.971443      0.3938      0.7040
+_RACEGR3_2.0               -1.489777        0.906040     -1.6443      0.1387
+_RACEGR3_3.0               -0.759169        0.998028     -0.7607      0.4687
+_EDUCAG_1.0                -0.587810        0.870589     -0.6752      0.5186
+_EDUCAG_2.0                -0.804557        0.833021     -0.9658      0.3624
+_EDUCAG_3.0                 0.069185        0.983270      0.0704      0.9456
+----------------------------------------------------------------------------
+
+                         Odds Ratio Estimates
+
+Effect                    Odds Ratio
+------------------------------------
+URRU_0.0                      2.1996
+URRU_1.0                      1.4935
+year_centered                 1.3296
+_AGE_G_1.0                    2.5574
+_AGE_G_2.0                    0.3435
+_AGE_G_3.0                    0.6509
+_AGE_G_4.0                    0.8903
+_AGE_G_5.0                    0.2621
+SEXVAR_1.0                    0.4700
+_RACEGR3_1.0                  1.4660
+_RACEGR3_2.0                  0.2254
+_RACEGR3_3.0                  0.4681
+_EDUCAG_1.0                   0.5555
+_EDUCAG_2.0                   0.4473
+_EDUCAG_3.0                   1.0716
+------------------------------------
+
+                       Association of Predicted Probabilities
+
+  Percent Concordant      69.0
+  Percent Discordant      30.9
+  c Statistic           0.6906

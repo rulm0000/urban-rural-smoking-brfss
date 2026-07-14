@@ -1,0 +1,7 @@
+{
+  "bundle": "t003_panel_logistic_plm",
+  "source_file": "sas_panel_final.sas",
+  "source_blob_sha": "46c5f5bda9ce0d4f52104e39b0da38432b733ea5",
+  "source_commit": "7b65277565a79389dd0e1b2452acda8bef97bd30",
+  "notes": "Predicted-probability panel for Model 3b (URRU x year_centered interaction): PROC LOGISTIC with STORE, PROC PLM scoring (score ... / ilink) on a weighted-means grid, PROC SQL join to weighted prevalence, and a PROC SGPANEL panel figure. The per-entity model/store/score blocks, prevalence PROC MEANS, SQL merge and SGPANEL are unchanged from the source; the PROC IMPORT of data/combinedbrfss_18_24v10.csv was replaced with an inline DATA step (synthetic BRFSS-shaped sample, not real CDC data) and the entity list limited to states present in that sample (Nationwide + Arizona + Arkansas)."
+}

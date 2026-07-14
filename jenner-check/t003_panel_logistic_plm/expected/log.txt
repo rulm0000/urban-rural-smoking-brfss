@@ -1,0 +1,177 @@
+NOTE: Jenner v1.5.30 (build v1.5.30+unknown.20260714T043649Z.x86_64-unknown-linux-gnu)
+
+NOTE: Option OBS changed to 100.
+NOTE: ODS Graphics is ON (width=1200px, height=900px, format=PNG).
+NOTE: DATA brfss
+
+NOTE: Processing inline DATALINES (96 lines)
+
+NOTE: Read 96 rows from DATALINES.
+NOTE: Wrote brfss (96 rows, 13 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA brfss
+
+
+NOTE: Read 96 rows from brfss.
+NOTE: Wrote brfss (96 rows, 13 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC MEANS
+NOTE: Output dataset means has 1 observations and 6 variables.
+NOTE: PROC MEANS statement used.
+NOTE: DATA score
+
+
+NOTE: Read 1 rows from means.
+NOTE: Wrote score (14 rows, 6 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA temp
+
+
+NOTE: Read 96 rows from brfss.
+NOTE: Wrote temp (96 rows, 13 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC LOGISTIC data=temp
+
+NOTE: Using Python statsmodels.api.Logit version 0.14.6
+NOTE: ODS plot written: logistic_oddsratio.spec.json
+NOTE: ODS plot written: logistic_roc.spec.json
+NOTE: PROC LOGISTIC ODS Graphics generated.
+NOTE: PROC LOGISTIC completed. Results written to: ./ods_output/logistic_results.spec.json
+NOTE: PROC PLM restore=model_store
+
+NOTE: PROC PLM: loaded 4 fit statistic(s) from item store.
+NOTE: PROC PLM statement used.
+NOTE: DATA s
+
+
+NOTE: Read 14 rows from s.
+NOTE: Wrote s (14 rows, 7 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA preds
+
+
+NOTE: Read 14 rows from s.
+NOTE: Wrote preds (14 rows, 9 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA temp
+
+
+NOTE: Read 48 rows from brfss.
+NOTE: Wrote temp (48 rows, 13 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC LOGISTIC data=temp
+
+NOTE: Using Python statsmodels.api.Logit version 0.14.6
+NOTE: ODS plot written: logistic_oddsratio.spec.json
+NOTE: ODS plot written: logistic_roc.spec.json
+NOTE: PROC LOGISTIC ODS Graphics generated.
+NOTE: PROC LOGISTIC completed. Results written to: ./ods_output/logistic_results.spec.json
+NOTE: PROC PLM restore=model_store
+
+NOTE: PROC PLM: loaded 4 fit statistic(s) from item store.
+NOTE: PROC PLM statement used.
+NOTE: DATA s
+
+
+NOTE: Read 14 rows from s.
+NOTE: Wrote s (14 rows, 9 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC APPEND base=preds data=s
+
+NOTE: Appended 14 rows.
+NOTE: DATA temp
+
+
+NOTE: Read 48 rows from brfss.
+NOTE: Wrote temp (48 rows, 13 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC LOGISTIC data=temp
+
+NOTE: Using Python statsmodels.api.Logit version 0.14.6
+NOTE: ODS plot written: logistic_oddsratio.spec.json
+NOTE: ODS plot written: logistic_roc.spec.json
+NOTE: PROC LOGISTIC ODS Graphics generated.
+NOTE: PROC LOGISTIC completed. Results written to: ./ods_output/logistic_results.spec.json
+NOTE: PROC PLM restore=model_store
+
+NOTE: PROC PLM: loaded 4 fit statistic(s) from item store.
+NOTE: PROC PLM statement used.
+NOTE: DATA s
+
+
+NOTE: Read 14 rows from s.
+NOTE: Wrote s (14 rows, 9 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC APPEND base=preds data=s
+
+NOTE: Appended 14 rows.
+NOTE: PROC MEANS
+NOTE: Output dataset prevalence has 27 observations and 6 variables.
+NOTE: PROC MEANS statement used.
+NOTE: DATA prevalence
+
+
+NOTE: Read 27 rows from prevalence.
+NOTE: Wrote prevalence (27 rows, 4 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC MEANS
+NOTE: Output dataset prev_nation has 14 observations and 5 variables.
+NOTE: PROC MEANS statement used.
+NOTE: DATA prev_nation
+
+
+NOTE: Read 14 rows from prev_nation.
+NOTE: Wrote prev_nation (14 rows, 4 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA prevalence
+
+
+NOTE: Read 14 rows from prev_nation.
+NOTE: Read 41 rows from prevalence.
+NOTE: Wrote prevalence (41 rows, 4 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA plot_pred
+
+
+NOTE: Read 42 rows from preds.
+NOTE: Wrote plot_pred (42 rows, 5 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC SQL 
+
+NOTE: Table plot created.
+NOTE: PROC SQL statement used.
+NOTE: PROC SGPANEL data=plot
+
+NOTE: PROC SGPANEL output written to: ./ods_output/sas_panel_entities.png
+=================================================================
+ANALYSIS COMPLETE
+=================================================================
+NOTE: ODS Graphics is OFF.

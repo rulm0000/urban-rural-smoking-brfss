@@ -1,0 +1,36 @@
+NOTE: Jenner v1.5.30 (build v1.5.30+unknown.20260714T020019Z.x86_64-unknown-linux-gnu)
+
+NOTE: Option OBS changed to 100.
+NOTE: DATA work.CombinedBRFSS_18_24v10
+
+NOTE: Processing inline DATALINES (96 lines)
+
+NOTE: Read 96 rows from DATALINES.
+NOTE: Wrote work.CombinedBRFSS_18_24v10 (96 rows, 13 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC SURVEYLOGISTIC data=CombinedBRFSS_18_24v10
+
+NOTE: Using Python statsmodels version 0.14.6
+NOTE: PROC SURVEYLOGISTIC completed.
+NOTE: PROC SURVEYLOGISTIC data=CombinedBRFSS_18_24v10
+
+NOTE: Using Python statsmodels version 0.14.6
+NOTE: PROC SURVEYLOGISTIC completed.
+NOTE: PROC SURVEYLOGISTIC data=CombinedBRFSS_18_24v10
+
+NOTE: Using Python statsmodels version 0.14.6
+NOTE: PROC SURVEYLOGISTIC completed.
+NOTE: PROC SURVEYLOGISTIC data=CombinedBRFSS_18_24v10
+
+NOTE: Using Python statsmodels version 0.14.6
+NOTE: PROC SURVEYLOGISTIC completed.
+NOTE: PROC SURVEYLOGISTIC data=CombinedBRFSS_18_24v10
+
+NOTE: Using Python statsmodels version 0.14.6
+NOTE: PROC SURVEYLOGISTIC completed.
+NOTE: PROC SURVEYLOGISTIC data=CombinedBRFSS_18_24v10
+
+NOTE: Using Python statsmodels version 0.14.6
+NOTE: PROC SURVEYLOGISTIC completed.
