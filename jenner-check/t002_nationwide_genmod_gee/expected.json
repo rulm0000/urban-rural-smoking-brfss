@@ -1,0 +1,21 @@
+{
+  "_captured_at": "2026-07-14T08:58:42Z",
+  "_captured_run_id": "r_458bb26d48ce49b1a0165ede03b34cab",
+  "status": "ok",
+  "exit_code": 0,
+  "log_contains": [
+    "NOTE: Read 96 rows from DATALINES.",
+    "NOTE: Wrote work.brfss_raw (96 rows, 13 columns).",
+    "NOTE: PROC GENMOD using Python wrapper (interaction/GEE/Tweedie support).",
+    "NOTE: PROC GENMOD: Emitting ODS OUTPUT datasets (3 destination(s))",
+    "NOTE: Option OBS changed to 100."
+  ],
+  "log_does_not_contain": [
+    "ERROR:",
+    "[JENNER-ERROR"
+  ],
+  "diagnostics": {
+    "parse_warnings": [],
+    "runtime_warnings": []
+  }
+}

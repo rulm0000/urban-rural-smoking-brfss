@@ -1,0 +1,20 @@
+{
+  "_captured_at": "2026-07-14T08:56:03Z",
+  "_captured_run_id": "r_41cbda77cc61406e9a19f4c74424513c",
+  "status": "ok",
+  "exit_code": 0,
+  "log_contains": [
+    "NOTE: Read 96 rows from DATALINES.",
+    "NOTE: Wrote work.CombinedBRFSS_18_24v10 (96 rows, 13 columns).",
+    "NOTE: PROC SURVEYLOGISTIC completed.",
+    "NOTE: Option OBS changed to 100."
+  ],
+  "log_does_not_contain": [
+    "ERROR:",
+    "[JENNER-ERROR"
+  ],
+  "diagnostics": {
+    "parse_warnings": [],
+    "runtime_warnings": []
+  }
+}

@@ -1,0 +1,323 @@
+                                     
+---------------------------  --------
+Number of Observations Read        96
+Number of Observations Used        96
+
+              Response Profile               
+  Probability modeled is currentsmoker='1'   
+
+Ordered Value  currentsmoker  Total Frequency
+-------------  -------------  ---------------
+            1  0                           68
+            2  1                           28
+
+    Class Level Information    
+
+Class       Levels  Values     
+--------  --------  -----------
+URRU             2  0 1        
+_AGE_G           6  1 2 3 4 5 6
+SEXVAR           2  1 2        
+_RACEGR3         4  1 2 3 4    
+_EDUCAG          4  1 2 3 4    
+
+                                             
+---------------------------------------------
+Convergence criterion (GCONV=1E-8) satisfied.
+
+The LOGISTIC Procedure
+Response Variable: currentsmoker
+
+Criterion     Value
+---------  --------
+AIC         126.965
+-2 Log L     94.965
+SC          167.994
+
+                Analysis of Maximum Likelihood Estimates                 
+
+Parameter           Estimate  Standard Error  Wald Chi-Square  Pr > ChiSq
+------------------  --------  --------------  ---------------  ----------
+Intercept            -1.3403          0.9705           1.9075      0.1672
+URRU                  0.7781          0.6256           1.5470      0.2136
+URRU                  0.0000          0.0000                .           .
+year_centered         0.0776          0.1758           0.1949      0.6589
+_AGE_G               -0.7581          0.8357           0.8229      0.3643
+_AGE_G                1.1123          0.8607           1.6702      0.1962
+_AGE_G               -0.3825          0.8325           0.2111      0.6459
+_AGE_G                0.7765          1.1123           0.4874      0.4851
+_AGE_G                0.6064          0.9909           0.3745      0.5406
+_AGE_G                0.0000          0.0000                .           .
+SEXVAR                0.4252          0.5636           0.5692      0.4506
+SEXVAR                0.0000          0.0000                .           .
+_RACEGR3             -0.0215          0.7657           0.0008      0.9775
+_RACEGR3             -0.5849          0.7854           0.5546      0.4565
+_RACEGR3              1.1037          0.7282           2.2969      0.1296
+_RACEGR3              0.0000          0.0000                .           .
+_EDUCAG              -0.1113          0.6848           0.0264      0.8709
+_EDUCAG              -0.0092          0.6990           0.0002      0.9895
+_EDUCAG              -2.6035          1.2456           4.3690      0.0366
+_EDUCAG               0.0000          0.0000                .           .
+URRU*year_centered   -0.3073          0.2643           1.3523      0.2449
+
+                          Odds Ratio Estimates                          
+
+Effect              Point Estimate  95% Wald CL Lower  95% Wald CL Upper
+------------------  --------------  -----------------  -----------------
+URRU                         2.177              0.639              7.420
+year_centered                1.081              0.766              1.525
+_AGE_G                       0.469              0.091              2.411
+_AGE_G                       3.041              0.563             16.431
+_AGE_G                       0.682              0.133              3.488
+_AGE_G                       2.174              0.246             19.232
+_AGE_G                       1.834              0.263             12.789
+SEXVAR                       1.530              0.507              4.617
+_RACEGR3                     0.979              0.218              4.389
+_RACEGR3                     0.557              0.120              2.597
+_RACEGR3                     3.015              0.724             12.566
+_EDUCAG                      0.895              0.234              3.424
+_EDUCAG                      0.991              0.252              3.899
+_EDUCAG                      0.074              0.006              0.850
+URRU*year_centered           0.735              0.438              1.234
+
+
+               The PLM Procedure
+
+  Restored Item Store: model_store
+
+                                     
+---------------------------  --------
+Number of Observations Read        48
+Number of Observations Used        48
+
+              Response Profile               
+  Probability modeled is currentsmoker='1'   
+
+Ordered Value  currentsmoker  Total Frequency
+-------------  -------------  ---------------
+            1  0                           35
+            2  1                           13
+
+    Class Level Information    
+
+Class       Levels  Values     
+--------  --------  -----------
+URRU             2  0 1        
+_AGE_G           6  1 2 3 4 5 6
+SEXVAR           2  1 2        
+_RACEGR3         4  1 2 3 4    
+_EDUCAG          4  1 2 3 4    
+
+                                             
+---------------------------------------------
+Convergence criterion (GCONV=1E-8) satisfied.
+
+                                                                                                                     
+---------------------------------------------------------------------------------------------------------------------
+WARNING: There is possibly a quasi-complete separation of data points. The maximum likelihood estimate may not exist.
+
+The LOGISTIC Procedure
+Response Variable: currentsmoker
+
+Criterion     Value
+---------  --------
+AIC          74.527
+-2 Log L     42.527
+SC          104.466
+
+                Analysis of Maximum Likelihood Estimates                 
+
+Parameter           Estimate  Standard Error  Wald Chi-Square  Pr > ChiSq
+------------------  --------  --------------  ---------------  ----------
+Intercept            -1.2782          1.2314           1.0775      0.2993
+URRU                  0.4131          1.0248           0.1625      0.6868
+URRU                  0.0000          0.0000                .           .
+year_centered        -0.0964          0.3022           0.1017      0.7498
+_AGE_G                0.2629          1.0441           0.0634      0.8012
+_AGE_G                2.4596          1.2720           3.7391      0.0532
+_AGE_G               -0.1234          1.2149           0.0103      0.9191
+_AGE_G               -0.9894          2.2004           0.2022      0.6530
+_AGE_G                1.1401          1.1909           0.9164      0.3384
+_AGE_G                0.0000          0.0000                .           .
+SEXVAR               -0.1811          0.7562           0.0574      0.8107
+SEXVAR                0.0000          0.0000                .           .
+_RACEGR3             -0.5518          1.2855           0.1842      0.6678
+_RACEGR3             -0.2394          1.0815           0.0490      0.8248
+_RACEGR3              0.1739          1.0931           0.0253      0.8736
+_RACEGR3              0.0000          0.0000                .           .
+_EDUCAG               0.9293          1.0042           0.8563      0.3548
+_EDUCAG              -0.6575          1.1272           0.3402      0.5597
+_EDUCAG              -0.8439          1.2382           0.4646      0.4955
+_EDUCAG               0.0000          0.0000                .           .
+URRU*year_centered   -0.0328          0.3912           0.0070      0.9333
+
+                          Odds Ratio Estimates                          
+
+Effect              Point Estimate  95% Wald CL Lower  95% Wald CL Upper
+------------------  --------------  -----------------  -----------------
+URRU                         1.512              0.203             11.266
+_AGE_G                       1.301              0.168             10.067
+_AGE_G                      11.701              0.967            141.556
+_AGE_G                       0.884              0.082              9.561
+_AGE_G                       0.372              0.005             27.749
+_AGE_G                       3.127              0.303             32.273
+SEXVAR                       0.834              0.190              3.673
+_RACEGR3                     0.576              0.046              7.155
+_RACEGR3                     0.787              0.095              6.556
+_RACEGR3                     1.190              0.140             10.138
+_EDUCAG                      2.533              0.354             18.130
+_EDUCAG                      0.518              0.057              4.720
+_EDUCAG                      0.430              0.038              4.869
+year_centered                0.908              0.502              1.642
+URRU*year_centered           0.968              0.450              2.084
+
+
+               The PLM Procedure
+
+  Restored Item Store: model_store
+
+                                     
+---------------------------  --------
+Number of Observations Read        48
+Number of Observations Used        48
+
+              Response Profile               
+  Probability modeled is currentsmoker='1'   
+
+Ordered Value  currentsmoker  Total Frequency
+-------------  -------------  ---------------
+            1  0                           33
+            2  1                           15
+
+    Class Level Information    
+
+Class       Levels  Values     
+--------  --------  -----------
+URRU             2  0 1        
+_AGE_G           6  1 2 3 4 5 6
+SEXVAR           2  1 2        
+_RACEGR3         4  1 2 3 4    
+_EDUCAG          4  1 2 3 4    
+
+                                             
+---------------------------------------------
+Convergence criterion (GCONV=1E-8) satisfied.
+
+                                                                                                                     
+---------------------------------------------------------------------------------------------------------------------
+WARNING: There is possibly a quasi-complete separation of data points. The maximum likelihood estimate may not exist.
+
+The LOGISTIC Procedure
+Response Variable: currentsmoker
+
+Criterion     Value
+---------  --------
+AIC          66.981
+-2 Log L     34.981
+SC           96.920
+
+                Analysis of Maximum Likelihood Estimates                 
+
+Parameter           Estimate  Standard Error  Wald Chi-Square  Pr > ChiSq
+------------------  --------  --------------  ---------------  ----------
+Intercept             1.4495          2.0525           0.4988      0.4800
+URRU                  0.5761          1.0523           0.2998      0.5840
+URRU                  0.0000          0.0000                .           .
+year_centered         0.2196          0.2655           0.6839      0.4083
+_AGE_G               -3.1918          2.0044           2.5356      0.1113
+_AGE_G               -1.7334          1.7798           0.9485      0.3301
+_AGE_G               -2.0686          1.6487           1.5742      0.2096
+_AGE_G               -0.3604          2.2331           0.0261      0.8718
+_AGE_G               -0.7707          1.9978           0.1488      0.6997
+_AGE_G                0.0000          0.0000                .           .
+SEXVAR                0.6023          1.0054           0.3589      0.5491
+SEXVAR                0.0000          0.0000                .           .
+_RACEGR3             -1.2197          1.3327           0.8376      0.3601
+_RACEGR3             -1.5708          1.2584           1.5581      0.2119
+_RACEGR3             -0.7940          1.3706           0.3356      0.5624
+_RACEGR3              0.0000          0.0000                .           .
+_EDUCAG               0.1375          1.1532           0.0142      0.9051
+_EDUCAG               0.8447          1.1627           0.5278      0.4675
+_EDUCAG              -3.2381          1.8113           3.1960      0.0738
+_EDUCAG               0.0000          0.0000                .           .
+URRU*year_centered   -0.7052          0.4716           2.2356      0.1349
+
+                          Odds Ratio Estimates                          
+
+Effect              Point Estimate  95% Wald CL Lower  95% Wald CL Upper
+------------------  --------------  -----------------  -----------------
+URRU                         1.779              0.226             13.993
+_AGE_G                       0.041              0.001              2.089
+_AGE_G                       0.177              0.005              5.783
+_AGE_G                       0.126              0.005              3.199
+_AGE_G                       0.697              0.009             55.496
+_AGE_G                       0.463              0.009             23.220
+SEXVAR                       1.826              0.255             13.103
+_RACEGR3                     0.295              0.022              4.024
+_RACEGR3                     0.208              0.018              2.449
+_RACEGR3                     0.452              0.031              6.635
+_EDUCAG                      1.147              0.120             10.997
+_EDUCAG                      2.327              0.238             22.728
+_EDUCAG                      0.039              0.001              1.366
+year_centered                1.246              0.740              2.096
+URRU*year_centered           0.494              0.196              1.245
+
+
+               The PLM Procedure
+
+  Restored Item Store: model_store
+
+PROC SGPANEL Output
+Data: plot
+
+Variables: entity, row, year, location, pred, prev
+
+    entity         row        year    location        pred        prev
+----------  ----------  ----------  ----------  ----------  ----------
+Nationwide           1        2018       Urban  0.0778412093  0.4065915565
+Nationwide           1        2019       Urban  0.0835966153  0.3932590639
+Nationwide           1        2020       Urban  0.0897361535  0.0483038212
+Nationwide           1        2021       Urban  0.0962792214  0.2040403797
+Nationwide           1        2022       Urban  0.1032452613  0.3702535557
+Nationwide           1        2023       Urban  0.1106535994           0
+Nationwide           1        2024       Urban  0.118523262  0.5083352904
+Nationwide           1        2018       Rural  0.1552519784  0.595810174
+Nationwide           1        2019       Rural  0.1657024959  0.2413328064
+Nationwide           1        2020       Rural  0.1767093184  0.3730293831
+Nationwide           1        2021       Rural  0.1882822715  0.6093998873
+Nationwide           1        2022       Rural  0.2004286378  0.2433636046
+Nationwide           1        2023       Rural  0.21315282           0
+Nationwide           1        2024       Rural  0.2264560105  0.2074956477
+   Arizona           2        2018       Urban  0.1085458363           1
+   Arizona           2        2019       Urban  0.0995653048  0.3633372227
+   Arizona           2        2020       Urban  0.091251721  0.0654134793
+   Arizona           2        2021       Urban  0.0835678863  0.2190856906
+   Arizona           2        2022       Urban  0.0764766172           0
+   Arizona           2        2023       Urban  0.0699411635           0
+   Arizona           2        2024       Urban  0.0639255504  0.1844615173
+   Arizona           2        2018       Rural  0.1554423328  0.3490686314
+   Arizona           2        2019       Rural  0.1432051112           0
+   Arizona           2        2020       Rural  0.1317809458  0.5400138274
+   Arizona           2        2021       Rural  0.1211392872  0.1946628804
+   Arizona           2        2022       Rural  0.1112468612           0
+   Arizona           2        2024       Rural  0.0935675728  0.3387460213
+  Arkansas           3        2018       Urban  0.1437822713  0.2216637127
+  Arkansas           3        2019       Urban  0.1729771026  0.4404781622
+  Arkansas           3        2020       Urban  0.2066690499           0
+  Arkansas           3        2021       Urban  0.2449795024           0
+  Arkansas           3        2022       Urban  0.2878151722           1
+  Arkansas           3        2023       Urban  0.3348193426           0
+  Arkansas           3        2024       Urban  0.3853464064  0.659351601
+  Arkansas           3        2018       Rural  0.2300394022  0.8896053052
+  Arkansas           3        2019       Rural  0.271201078  0.3012113137
+  Arkansas           3        2020       Rural  0.3166985092           0
+  Arkansas           3        2021       Rural  0.3659956101  0.910565108
+  Arkansas           3        2022       Rural  0.418269057  0.3600873137
+  Arkansas           3        2023       Rural  0.472445011           0
+  Arkansas           3        2024       Rural  0.5272778029           0
+   Arizona           2        2023       Rural  0.102068447           .
+
+row: N=42, Min=1.0000, Max=3.0000, Mean=2.0000, Sum=84.0000
+year: N=42, Min=2018.0000, Max=2024.0000, Mean=2021.0000, Sum=84882.0000
+pred: N=42, Min=0.0639, Max=0.5273, Mean=0.1866, Sum=7.8359
+prev: N=41, Min=0.0000, Max=1.0000, Mean=0.2985, Sum=12.2390

@@ -1,0 +1,103 @@
+NOTE: Jenner v1.5.30 (build v1.5.30+unknown.20260714T043649Z.x86_64-unknown-linux-gnu)
+
+NOTE: Option OBS changed to 100.
+NOTE: DATA work.brfss_raw
+
+NOTE: Processing inline DATALINES (96 lines)
+
+NOTE: Read 96 rows from DATALINES.
+NOTE: Wrote work.brfss_raw (96 rows, 13 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA work.brfss_clean
+
+
+NOTE: Read 96 rows from work.brfss_raw.
+NOTE: Wrote work.brfss_clean (96 rows, 14 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC SORT data=work.brfss_clean
+
+NOTE: Read 96 rows from work.brfss_clean.
+NOTE: Wrote work.brfss_clean (96 rows, 14 columns).
+NOTE: PROC SORT statement used.
+NOTE: Option TITLE changed to Data Summary.
+NOTE: PROC MEANS
+NOTE: PROC MEANS statement used.
+NOTE: Option TITLE changed to MODEL 1: GEE Logistic Regression with State Clustering.
+NOTE: Option TITLE2 changed to DV: Current Smoker | IVs: urru, year_centered | Clustering: State.
+NOTE: PROC GENMOD data=work.brfss_clean
+
+NOTE: PROC GENMOD using Python wrapper (interaction/GEE/Tweedie support).
+NOTE: PROC GENMOD using Python wrapper
+NOTE: 
+NOTE: Response Variable: CURRENTSMOKER
+NOTE: Distribution: BINOMIAL
+NOTE: Link Function: LOGIT
+NOTE: Number of Observations: 96
+NOTE:   Model fitted successfully with 96 observations
+NOTE: ODS plot written: genmod_residuals_vs_predicted.spec.json
+NOTE: ODS plot written: genmod_residual_histogram_panel.spec.json
+NOTE: ODS plot written: genmod_residuals_vs_obs_order.spec.json
+NOTE: ODS plot written: genmod_qq_plot.spec.json
+NOTE: PROC GENMOD ODS Graphics generated.
+NOTE: PROC GENMOD: Emitting ODS OUTPUT datasets (3 destination(s))
+NOTE: Option TITLE changed to MODEL 2: GEE Logistic Regression with State Clustering.
+NOTE: Option TITLE2 changed to DV: Current Smoker | IVs: urru, year_centered, age, sex, race | Clustering: State.
+NOTE: PROC GENMOD data=work.brfss_clean
+
+NOTE: PROC GENMOD using Python wrapper (interaction/GEE/Tweedie support).
+NOTE: PROC GENMOD using Python wrapper
+NOTE: 
+NOTE: Response Variable: CURRENTSMOKER
+NOTE: Distribution: BINOMIAL
+NOTE: Link Function: LOGIT
+NOTE: Number of Observations: 96
+NOTE:   Model fitted successfully with 96 observations
+NOTE: ODS plot written: genmod_residuals_vs_predicted.spec.json
+NOTE: ODS plot written: genmod_residual_histogram_panel.spec.json
+NOTE: ODS plot written: genmod_residuals_vs_obs_order.spec.json
+NOTE: ODS plot written: genmod_qq_plot.spec.json
+NOTE: PROC GENMOD ODS Graphics generated.
+NOTE: PROC GENMOD: Emitting ODS OUTPUT datasets (3 destination(s))
+NOTE: Option TITLE changed to MODEL 3a: GEE Logistic Regression with State Clustering.
+NOTE: Option TITLE2 changed to DV: Current Smoker | IVs: urru, year_centered, age, sex, race, education | Clustering: State.
+NOTE: PROC GENMOD data=work.brfss_clean
+
+NOTE: PROC GENMOD using Python wrapper (interaction/GEE/Tweedie support).
+NOTE: PROC GENMOD using Python wrapper
+NOTE: 
+NOTE: Response Variable: CURRENTSMOKER
+NOTE: Distribution: BINOMIAL
+NOTE: Link Function: LOGIT
+NOTE: Number of Observations: 96
+NOTE:   Model fitted successfully with 96 observations
+NOTE: ODS plot written: genmod_residuals_vs_predicted.spec.json
+NOTE: ODS plot written: genmod_residual_histogram_panel.spec.json
+NOTE: ODS plot written: genmod_residuals_vs_obs_order.spec.json
+NOTE: ODS plot written: genmod_qq_plot.spec.json
+NOTE: PROC GENMOD ODS Graphics generated.
+NOTE: PROC GENMOD: Emitting ODS OUTPUT datasets (3 destination(s))
+NOTE: Option TITLE changed to MODEL 3b: GEE Logistic Regression WITH INTERACTION and State Clustering.
+NOTE: Option TITLE2 changed to DV: Current Smoker | IVs: urru*year_centered, age, sex, race, education | Clustering: State.
+NOTE: PROC GENMOD data=work.brfss_clean
+
+NOTE: PROC GENMOD using Python wrapper (interaction/GEE/Tweedie support).
+NOTE: PROC GENMOD using Python wrapper
+NOTE: 
+NOTE: Response Variable: CURRENTSMOKER
+NOTE: Distribution: BINOMIAL
+NOTE: Link Function: LOGIT
+NOTE: Number of Observations: 96
+NOTE:   Model fitted successfully with 96 observations
+NOTE: ODS plot written: genmod_residuals_vs_predicted.spec.json
+NOTE: ODS plot written: genmod_residual_histogram_panel.spec.json
+NOTE: ODS plot written: genmod_residuals_vs_obs_order.spec.json
+NOTE: ODS plot written: genmod_qq_plot.spec.json
+NOTE: PROC GENMOD ODS Graphics generated.
+NOTE: PROC GENMOD: Emitting ODS OUTPUT datasets (3 destination(s))
+================================================================
+GEE MODELS 1, 2, 3a, 3b COMPLETE
+================================================================
