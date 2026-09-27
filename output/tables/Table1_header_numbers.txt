@@ -1,0 +1,10 @@
+records in pooled file      : 3,388,638
+analytic sample (complete)  : 3,054,432  (90.1%)
+43-state analytic sample    : 2,686,690
+weighted N (sum of _LLCPWT) : 1,827,333,183
+weighted N (avg annual, /8) : 228,416,648
+overall smoking prevalence  : 13.1%
+
+state n range   : 18,294 (Nevada) to 176,783 (New York)
+rural n range   : 546 (Nevada) to 45,875 (Maine)
+urban n range   : 17,748 (Nevada) to 161,879 (New York)

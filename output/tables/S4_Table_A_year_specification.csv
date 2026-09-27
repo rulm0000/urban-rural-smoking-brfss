@@ -1,0 +1,6 @@
+﻿Specification,Term,OR,95% CI,P
+Linear year (primary),Rural × year,1.020,"(1.011, 1.030)",<.001
+Quadratic year,Rural × year,1.019,"(1.002, 1.035)",.024
+,Rural × year²,1.001,"(0.996, 1.005)",.788
+,Year²,0.997,"(0.995, 0.999)",<.001
+,Joint test: year² and rural × year²,,,<.001

@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite it as below."
+title: "Urban-rural differences in cigarette smoking by state, BRFSS 2018-2025: analysis code"
+type: software
+authors:
+  - family-names: Ulm
+    given-names: Clayton R.
+    affiliation: "University of North Carolina at Chapel Hill"
+repository-code: "https://github.com/rulm0000/urban-rural-smoking-brfss"
+license: MIT
+version: 1.0.0
+date-released: 2026-09-27
+keywords:
+  - BRFSS
+  - smoking
+  - rural health
+  - survey data

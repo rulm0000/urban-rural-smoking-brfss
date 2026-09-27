@@ -1,204 +1,94 @@
-# Urban-Rural Differences in Adult Smoking Prevalence, 2018-2024: Analysis of BRFSS Data
+# Urban-rural differences in cigarette smoking by state, BRFSS 2018-2025
 
-This repository contains the analytic code for a study examining urban-rural disparities in current smoking prevalence among U.S. adults from 2018 to 2024, using data from the Behavioral Risk Factor Surveillance System (BRFSS).
+Analysis code for:
 
-## Citation
+> Ulm CR, et al. State-level trends in urban-rural differences in cigarette smoking in the United States. *PLOS ONE* (under review, PONE-D-26-32210).
 
-> [Author(s)]. Urban-Rural Differences in Adult Smoking Prevalence, 2018-2024. *[Journal Name]*. [Year]. [DOI].
+The code runs the full analysis, from the raw CDC files to every table and figure in the paper, with one command.
 
-*(Update with final publication details.)*
+## Quick start (Windows)
 
----
+Requirements: SAS 9.4, Stata 17 or later, Python 3.10 or later, about 10 GB of free disk space, and an internet connection for the first run.
 
-## Data Availability
-
-### Source Data
-
-This study uses public-use data from the **CDC Behavioral Risk Factor Surveillance System (BRFSS)**, years 2018-2024. The annual LLCP SAS Transport (.XPT) files can be downloaded from:
-
-- [CDC BRFSS Annual Survey Data](https://www.cdc.gov/brfss/annual_data/annual_data.htm)
-
-Download the following files and place them in the `data/` directory:
-
-| File | Description |
-|------|-------------|
-| `LLCP2018.XPT` | 2018 BRFSS Combined Landline and Cell Phone data |
-| `LLCP2019.XPT` | 2019 BRFSS Combined Landline and Cell Phone data |
-| `LLCP2020.XPT` | 2020 BRFSS Combined Landline and Cell Phone data |
-| `LLCP2021.XPT` | 2021 BRFSS Combined Landline and Cell Phone data |
-| `LLCP2022.XPT` | 2022 BRFSS Combined Landline and Cell Phone data |
-| `LLCP2023.XPT` | 2023 BRFSS Combined Landline and Cell Phone data |
-| `LLCP2024.XPT` | 2024 BRFSS Combined Landline and Cell Phone data |
-
-### Combined Analytic File
-
-The analysis scripts expect a single combined CSV file: **`data/combinedbrfss_18_24v10.csv`**. This file is created by appending the yearly BRFSS files and deriving the following key variables:
-
-| Variable | Description | Derivation |
-|----------|-------------|------------|
-| `currentsmoker` | Current smoker (binary: 0/1) | Recoded from `_RFSMOK3` |
-| `URRU` | Urban-rural status (binary: 0=Urban, 1=Rural) | Derived from `_URBSTAT` (2019-2024) and `MSCODE` (2018) |
-| `year_centered` | Survey year centered at 2020 | `IYEAR - 2020` |
-| `Quit` | Former smoker (binary: 0/1) | Derived from `_SMOKER3` |
-
-### GeoJSON
-
-The file `us-states.json` (state boundary GeoJSON for map generation) is included in the repository.
-
----
-
-## Repository Structure
-
-### Analysis Pipeline
-
-Scripts are organized by analysis stage. All scripts assume they are run from the **repository root directory**.
-
-```
-repo-root/
-|-- data/                          # User-supplied data (not included)
-|   |-- combinedbrfss_18_24v10.csv
-|   `-- LLCP20{18..24}.XPT        # Optional raw files
-|
-|-- output/                        # Generated output (not included)
-|   |-- tables/
-|   |-- reports/
-|   `-- figures/
-|
-|-- CS_QR_finalresults17_fixed_inter.sas   # [Step 1] State-level logistic models
-|-- Nationwide_analysis.sas                # [Step 2] Nationwide models (current + former smoking)
-|-- nationwide_genmod_gee_analysis.sas     # [Step 3] Nationwide GEE models
-|-- nationwide_clustered_logit_analysis.do # [Step 4] Nationwide clustered logit (Stata)
-|-- SimpleSlopes_v17_significant.sas       # [Step 5] Simple slopes for significant interactions
-|-- sas_panel_final.sas                    # [Step 6] Predicted probability panel (SAS)
-|-- panel_predicted_probs_15states.do      # [Step 7] Predicted probability panel (Stata)
-|-- descriptives_final.py                  # [Step 8] Descriptive statistics tables
-|-- generate_smoking_prevalence_map_v9.py  # [Step 9] Smoking prevalence choropleth maps
-|-- generate_choropleth_geopandas_v26.py   # [Step 10] Odds ratio choropleth maps
-|-- appendix_table_2_updated.py            # [Step 11] Appendix Table 2
-|-- us-states.json                         # State boundary GeoJSON
-`-- README.md
+```powershell
+git clone https://github.com/rulm0000/urban-rural-smoking-brfss.git
+cd urban-rural-smoking-brfss
+python -m pip install -r requirements.txt
+.\run_all.ps1
 ```
 
-### Script Descriptions
+You can also double-click `run_all.bat`.
 
-| Script | Software | Purpose |
-|--------|----------|---------|
-| `CS_QR_finalresults17_fixed_inter.sas` | SAS | State-level survey logistic regression (Models 1, 2, 3, 3b) for all 50 states + nationwide. Exports odds ratios to CSV and Excel. |
-| `Nationwide_analysis.sas` | SAS | Nationwide survey logistic models for current and former smoking (Models 1, 2, 3). |
-| `nationwide_genmod_gee_analysis.sas` | SAS | Nationwide GEE logistic regression with exchangeable correlation and state-level clustering (Models 1, 2, 3a, 3b). Includes predicted probabilities. |
-| `nationwide_clustered_logit_analysis.do` | Stata | Nationwide logistic regression with cluster-robust SEs by state (Models 1, 2, 3a, 3b). Produces predicted probability plots and an Excel export. |
-| `SimpleSlopes_v17_significant.sas` | SAS | Simple-slope odds ratios for the year effect at each level of urban-rural status, for states with significant interactions. |
-| `sas_panel_final.sas` | SAS | 3x5 panel figure of predicted probabilities (Model 3b) for nationwide + 14 states with significant interactions. |
-| `panel_predicted_probs_15states.do` | Stata | Equivalent panel figure to `sas_panel_final.sas`, produced in Stata with survey-weighted logistic regression. |
-| `descriptives_final.py` | Python | Weighted descriptive statistics (sample sizes, smoking prevalence) by urban-rural status, age, sex, race, education, and year. |
-| `generate_smoking_prevalence_map_v9.py` | Python | Four-panel choropleth map of state-level smoking prevalence (2018 vs 2024, urban vs rural). |
-| `generate_choropleth_geopandas_v26.py` | Python | Choropleth maps of state-level rural-vs-urban odds ratios from Models 1, 2, and 3. |
-| `appendix_table_2_updated.py` | Python | State-level rural vs urban prevalence, prevalence ratios, and change from 2018 to 2024 (Appendix Table 2). |
+The first step downloads the eight BRFSS files from CDC (about 8 GB) and checks each one against the SHA-256 checksums in `data/SHA256SUMS`. There are two ways to skip the download:
 
----
-
-## Models
-
-The analysis uses a stepwise modeling approach:
-
-| Model | Specification |
-|-------|---------------|
-| **Model 1** | `URRU + year_centered` |
-| **Model 2** | Model 1 + `_AGE_G` + `SEXVAR` + `_RACEGR3` |
-| **Model 3 / 3a** | Model 2 + `_EDUCAG` |
-| **Model 3b** | Model 3 + `URRU * year_centered` interaction |
-
-- **Outcome**: `currentsmoker` (binary)
-- **Primary predictor**: `URRU` (0 = Urban, 1 = Rural)
-- **Time variable**: `year_centered` (continuous, centered at 2020)
-- **Survey design**: weighted by `_LLCPWT`, stratified by `_STSTR`, clustered by `_PSU`
-
----
-
-## Key Variables
-
-| Variable | Construct | Source |
-|----------|-----------|--------|
-| `currentsmoker` | Current smoking status (0/1) | Derived from `_RFSMOK3` |
-| `URRU` | Urban (0) vs Rural (1) | Derived from `_URBSTAT` / `MSCODE` |
-| `year_centered` | Year centered at 2020 | Derived from `IYEAR` |
-| `_AGE_G` | Age group (6 categories) | BRFSS calculated variable |
-| `SEXVAR` / `_SEX` | Sex | BRFSS core / calculated variable |
-| `_RACEGR3` | Race/ethnicity (5 categories) | BRFSS calculated variable |
-| `_EDUCAG` | Education level (4 categories) | BRFSS calculated variable |
-| `_LLCPWT` | Final survey weight | BRFSS design variable |
-| `_STSTR` | Stratification variable | BRFSS design variable |
-| `_PSU` | Primary sampling unit | BRFSS design variable |
-| `_STATE` | State FIPS code | BRFSS identifier |
-
----
-
-## Software Requirements
-
-| Software | Version | Used For |
-|----------|---------|----------|
-| **SAS** | 9.4+ | PROC SURVEYLOGISTIC, PROC GENMOD, PROC LOGISTIC, PROC PLM |
-| **Stata** | 17+ | `svy: logistic`, `margins`, `logit` with `vce(cluster)` |
-| **Python** | 3.8+ | Descriptive tables, choropleth maps, appendix tables |
-
-### Python Packages
-
-```
-pandas
-numpy
-geopandas
-matplotlib
+```powershell
+.\run_all.ps1 -RawDir "D:\BRFSS"     # use BRFSS files you already have
+.\run_all.ps1 -UseArchivedData        # use the analytic file kept in this repository
 ```
 
----
+Other options:
 
-## How to Run
+- `-From 9` resumes from a later step.
+- `-SasExe` and `-StataExe` set the program paths if they are not found automatically.
 
-### Prerequisites
+A full run takes about 20 minutes on a laptop, mostly the SAS models.
 
-1. Download BRFSS data files from the CDC (see [Data Availability](#data-availability)).
-2. Prepare the combined analytic file `combinedbrfss_18_24v10.csv` and place it in `data/`.
-3. Create the output directory structure:
-   ```
-   mkdir -p output/tables output/reports output/figures
-   ```
+## What each step does
 
-### Execution Order
+| Step | Script | Produces |
+|---|---|---|
+| 1 | `code/01_download_brfss.py` | BRFSS 2018-2025 files, verified by checksum |
+| 2 | `code/02_build_analytic_file.py` | `data/derived/brfss_2018_2025_analytic.csv` (or unpacks it from the archived copy) |
+| 3 | `code/03_descriptives.py` | Table 1, S2 Table, S3 Table (sample flow and state-by-year counts) |
+| 4 | `code/04_import_analytic_file.sas` | SAS copy of the analytic file |
+| 5 | `code/05_state_models.sas` | Survey logistic models, nationwide and 43 states (Models 1, 2, 3a, 3b) |
+| 6 | `code/06_nationwide_gee.sas` | Nationwide survey-weighted GEE models, clustered by state |
+| 7 | `code/07_year_specification.sas` | Linear, quadratic and categorical survey year (S4 Table, Panel A) |
+| 8 | `code/08_state_quadratic.sas` | Quadratic trend within each state (S4 Table, Panel B) |
+| 9 | `code/09_model_tables.py` | Table 2, S1 Table, S4 Table, and the counts quoted in the Results |
+| 10 | `code/10_fig1_tilegrid.py` | Fig 1 |
+| 11 | `code/11_s1_fig_map.py` | S1 Fig |
+| 12 | `code/12_fig2_panels.do` | Fig 2 |
+| 13 | `code/13_fig2_tiff.py` | Fig 2 as a 300 dpi TIFF |
 
-Run scripts from the **repository root directory** in the following order:
+## Repository layout
 
-| Step | Script | Software | Output |
-|------|--------|----------|--------|
-| 1 | `CS_QR_finalresults17_fixed_inter.sas` | SAS | State-level OR tables (Excel + CSV) |
-| 2 | `Nationwide_analysis.sas` | SAS | Nationwide model results (log) |
-| 3 | `nationwide_genmod_gee_analysis.sas` | SAS | GEE results (HTML + Excel) |
-| 4 | `nationwide_clustered_logit_analysis.do` | Stata | Clustered logit results, plots, Excel |
-| 5 | `SimpleSlopes_v17_significant.sas` | SAS | Simple slope ORs (CSV + Excel) |
-| 6 | `sas_panel_final.sas` | SAS | Predicted probability panel (PNG + CSV) |
-| 7 | `panel_predicted_probs_15states.do` | Stata | Predicted probability panel (PNG + PDF) |
-| 8 | `descriptives_final.py` | Python | Descriptive statistics (CSV) |
-| 9 | `generate_smoking_prevalence_map_v9.py` | Python | Prevalence choropleth map (PNG) |
-| 10 | `generate_choropleth_geopandas_v26.py` | Python | OR choropleth map (PNG) |
-| 11 | `appendix_table_2_updated.py` | Python | Appendix Table 2 (CSV) |
+```
+run_all.ps1            one-command run (run_all.bat for double-click)
+code/                  analysis steps, numbered in run order; common.py holds shared paths
+data/SHA256SUMS        checksums of the CDC source files
+data/brfss_2018_2025_analytic.csv.xz   compressed analytic file (all 8 years)
+data/raw/              BRFSS files (downloaded; not tracked)
+data/derived/          analytic file (built; not tracked)
+output/tables/         manuscript and supplement tables (CSV)
+output/figures/        Fig 1, Fig 2, S1 Fig (PNG and TIFF)
+output/models/         model estimates from SAS and Stata
+output/logs/           run logs (not tracked)
+resources/             US state boundaries for S1 Fig
+```
 
-**Notes:**
-- Step 10 (`generate_choropleth_geopandas_v26.py`) requires the CSV output from Step 1.
-- Steps 6 and 7 produce equivalent panel figures in SAS and Stata, respectively.
-- Stata scripts change directory to `output/` at the start and reference data via `../data/`.
-- SAS and Python scripts use paths relative to the repo root.
+The outputs from the published run are in `output/` so results can be checked without re-running. A new run overwrites them, and `git diff` shows any difference.
 
----
+## Methods in brief
 
-## States with Significant Urban-Rural x Year Interactions
+- **Data:** BRFSS combined landline and cell phone public-use files, 2018-2025.
+- **Outcome:** current cigarette smoking (`_RFSMOK3`).
+- **Exposure:** urban vs rural county of residence (`_URBSTAT`, NCHS Urban-Rural Classification Scheme for Counties).
+- **Covariates:** age group, sex, race/ethnicity and education.
+- **Analytic sample:** complete cases (S3 Table).
+- **Survey design:** every model uses the BRFSS final weight (`_LLCPWT`), stratum (`_STSTR`) and primary sampling unit (`_PSU`) as provided by CDC for each survey year.
+  - State models: `PROC SURVEYLOGISTIC` (Taylor-series linearization).
+  - Nationwide models: survey-weighted generalized estimating equations with standard errors clustered by state (`PROC GENMOD`).
+- **Multiple testing:** q values control the false discovery rate across the 43 state-specific interaction tests (Benjamini-Hochberg).
 
-The following 14 states (plus nationwide) showed statistically significant interactions between urban-rural status and year in Model 3b:
+## Data
 
-Arizona, Arkansas, Colorado, Georgia, Iowa, Kansas, Maine, Mississippi, Missouri, Montana, Nebraska, South Carolina, Washington, Wisconsin
+BRFSS data are collected by the Centers for Disease Control and Prevention (CDC) and are publicly available at <https://www.cdc.gov/brfss/annual_data/annual_data.htm>. See [data/README.md](data/README.md) for file details, variable definitions and terms of use.
 
-These states are the focus of the simple slopes analysis and the predicted probability panel figures.
+Source: Centers for Disease Control and Prevention (CDC). Behavioral Risk Factor Surveillance System Survey Data. Atlanta, Georgia: U.S. Department of Health and Human Services, Centers for Disease Control and Prevention, 2018-2025.
 
----
+Use of these data does not imply endorsement by CDC.
 
 ## License
 
-This repository contains analytic code only. The underlying BRFSS data are publicly available from the CDC and are subject to CDC data use agreements.
+Code: MIT License (see `LICENSE`). BRFSS data: see [data/README.md](data/README.md).

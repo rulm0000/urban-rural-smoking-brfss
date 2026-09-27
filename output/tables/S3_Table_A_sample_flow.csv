@@ -1,0 +1,11 @@
+Step,Excluded,Remaining,Percent of initial
+"BRFSS respondents, 2018-2025",,3388638,100.0
+"Excluded: Current smoking status missing, don't know, or refused",193013,3195625,94.3
+Excluded: Urban-rural status unavailable: US territories (not classified by NCHS),57992,3137633,92.6
+Excluded: Urban-rural status unavailable: other,7022,3130611,92.4
+"Excluded: Race/ethnicity missing, don't know, or refused",66730,3063881,90.4
+"Excluded: Education missing, don't know, or refused",8733,3055148,90.2
+"Excluded: Sex missing, don't know, or refused",716,3054432,90.1
+Nationwide analytic sample (complete cases),,3054432,90.1
+Excluded from state-specific analyses: 8 jurisdictions with no rural respondents in 2018-2024,367742,2686690,79.3
+State-specific analytic sample (43 states),,2686690,79.3

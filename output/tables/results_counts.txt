@@ -1,0 +1,9 @@
+estimable states: 43
+Model 1: significant 39/43; rural higher 39 (OR 1.08-1.92); rural lower 0 [none]
+Model 2: significant 39/43; rural higher 39 (OR 1.13-1.84); rural lower 0 [none]
+Model 3a: significant 20/43; rural higher 19 (OR 1.10-1.48); rural lower 1 [Wyoming 0.89]
+Interaction P < .05: 10/43: Arkansas, Kansas, Kentucky, Maine, Missouri, Montana, Nebraska, Oregon, Washington, West Virginia
+Interaction q < .05: 6/43: Arkansas, Kansas, Montana, Nebraska, Washington, West Virginia
+Significant interactions with OR < 1 (narrowing gap): none
+Nationwide interaction: OR 1.020 (1.011, 1.030), P <.001
+Nationwide annual OR: urban 0.94 (0.93, 0.94), rural 0.96 (0.95, 0.97)
