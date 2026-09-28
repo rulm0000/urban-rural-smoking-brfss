@@ -17,27 +17,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Patch, Rectangle
 from PIL import Image
 
-from common import FIGURES_DIR, MODELS_DIR, ensure_dirs
-
-ABBR = {1: "AL", 2: "AK", 4: "AZ", 5: "AR", 6: "CA", 8: "CO", 9: "CT", 10: "DE", 11: "DC", 12: "FL",
-        13: "GA", 15: "HI", 16: "ID", 17: "IL", 18: "IN", 19: "IA", 20: "KS", 21: "KY", 22: "LA",
-        23: "ME", 24: "MD", 25: "MA", 26: "MI", 27: "MN", 28: "MS", 29: "MO", 30: "MT", 31: "NE",
-        32: "NV", 33: "NH", 34: "NJ", 35: "NM", 36: "NY", 37: "NC", 38: "ND", 39: "OH", 40: "OK",
-        41: "OR", 42: "PA", 44: "RI", 45: "SC", 46: "SD", 47: "TN", 48: "TX", 49: "UT", 50: "VT",
-        51: "VA", 53: "WA", 54: "WV", 55: "WI", 56: "WY"}
-# (row, column) tile positions; row 0 at the top
-GRID = {"AK": (0, 0), "ME": (0, 11), "VT": (1, 10), "NH": (1, 11),
-        "WA": (2, 1), "ID": (2, 2), "MT": (2, 3), "ND": (2, 4), "MN": (2, 5), "IL": (2, 6), "WI": (2, 7),
-        "MI": (2, 8), "NY": (2, 9), "RI": (2, 10), "MA": (2, 11),
-        "OR": (3, 1), "NV": (3, 2), "WY": (3, 3), "SD": (3, 4), "IA": (3, 5), "IN": (3, 6), "OH": (3, 7),
-        "PA": (3, 8), "NJ": (3, 9), "CT": (3, 10),
-        "CA": (4, 1), "UT": (4, 2), "CO": (4, 3), "NE": (4, 4), "MO": (4, 5), "KY": (4, 6), "WV": (4, 7),
-        "VA": (4, 8), "MD": (4, 9), "DE": (4, 10),
-        "AZ": (5, 2), "NM": (5, 3), "KS": (5, 4), "AR": (5, 5), "TN": (5, 6), "NC": (5, 7), "SC": (5, 8),
-        "DC": (5, 9),
-        "OK": (6, 4), "LA": (6, 5), "MS": (6, 6), "AL": (6, 7), "GA": (6, 8),
-        "HI": (7, 0), "TX": (7, 4), "FL": (7, 9)}
-assert len(GRID) == 51 and len(set(GRID.values())) == 51 and set(GRID) == set(ABBR.values())
+from common import ABBR, FIGURES_DIR, GRID, MODELS_DIR, ensure_dirs
 
 COLORS = {"OR ≥ 1.50": "#034e7b", "1.25 < OR < 1.50": "#3690c0", "OR ≤ 1.25": "#a6bddb",
           "OR < 1.0": "#fee090", "Non-significant": "#d9d9d9", "Rural sample size: n < 50": "#969696"}

@@ -116,7 +116,7 @@ $steps = @(
     @(8,  "SAS: state quadratic sensitivity",    { Run-Sas "08_state_quadratic.sas" }),
     @(9,  "Model tables",                        { Run-Python "09_model_tables.py" }),
     @(10, "Fig 1",                               { Run-Python "10_fig1_tilegrid.py" }),
-    @(11, "S1 Fig",                              { Run-Python "11_s1_fig_map.py" }),
+    @(11, "S1 Fig",                              { Run-Python "11_s1_fig_tilegrid.py" }),
     @(12, "Stata: Fig 2",                        { Run-Stata "12_fig2_panels.do" }),
     @(13, "Fig 2 TIFF",                          { Run-Python "13_fig2_tiff.py" })
 )

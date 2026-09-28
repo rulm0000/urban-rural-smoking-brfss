@@ -49,7 +49,7 @@ A full run takes about 20 minutes on a laptop, mostly the SAS models.
 | 8 | `code/08_state_quadratic.sas` | Quadratic trend within each state (S4 Table, Panel B) |
 | 9 | `code/09_model_tables.py` | Table 2, S1 Table, S4 Table, and the counts quoted in the Results |
 | 10 | `code/10_fig1_tilegrid.py` | Fig 1 |
-| 11 | `code/11_s1_fig_map.py` | S1 Fig |
+| 11 | `code/11_s1_fig_tilegrid.py` | S1 Fig |
 | 12 | `code/12_fig2_panels.do` | Fig 2 |
 | 13 | `code/13_fig2_tiff.py` | Fig 2 as a 300 dpi TIFF |
 
@@ -66,7 +66,6 @@ output/tables/         manuscript and supplement tables (CSV)
 output/figures/        Fig 1, Fig 2, S1 Fig (PNG and TIFF)
 output/models/         model estimates from SAS and Stata
 output/logs/           run logs (not tracked)
-resources/             US state boundaries for S1 Fig
 ```
 
 The outputs from the published run are in `output/` so results can be checked without re-running. A new run overwrites them, and `git diff` shows any difference.
