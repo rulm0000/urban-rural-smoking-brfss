@@ -1,5 +1,7 @@
 # Urban-rural differences in cigarette smoking by state, BRFSS 2018-2025
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23018447.svg)](https://doi.org/10.5281/zenodo.23018447)
+
 Analysis code for:
 
 > Ulm CR, et al. State-level trends in urban-rural differences in cigarette smoking in the United States. *PLOS ONE* (under review, PONE-D-26-32210).
@@ -80,6 +82,10 @@ The outputs from the published run are in `output/` so results can be checked wi
   - State models: `PROC SURVEYLOGISTIC` (Taylor-series linearization).
   - Nationwide models: survey-weighted generalized estimating equations with standard errors clustered by state (`PROC GENMOD`).
 - **Multiple testing:** q values control the false discovery rate across the 43 state-specific interaction tests (Benjamini-Hochberg).
+
+## Archived copy
+
+Version 1.0.0 of this repository, including the analytic data file, is archived on Zenodo: https://doi.org/10.5281/zenodo.23018447
 
 ## Data
 
