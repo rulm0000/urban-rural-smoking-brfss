@@ -8,7 +8,8 @@ Outputs (output/tables/):
   Table2_trends_and_interaction.csv   Table 2: urban and rural annual ORs and the urban-rural x
                                       year interaction (nationwide and states with P < .05),
                                       with Benjamini-Hochberg q values
-  S1_Table_urban_rural_ORs.csv        S1 Table: urban-rural OR, Models 1, 2 and 3a
+  S1_Table_urban_rural_ORs.csv        S1 Table: urban-rural OR, Models 1, 2 and 3a, with
+                                      Benjamini-Hochberg q values
   interaction_all_states.csv          interaction OR, P and q for all 43 states
   S4_Table_A_year_specification.csv   S4 Table, Panel A
   S4_Table_B_state_quadratic.csv      S4 Table, Panel B
@@ -18,7 +19,9 @@ Outputs (output/models/):
   fig2_entities.do                    panels and P/q labels for Fig 2 (read by step 12)
 
 Multiple testing: q values use the Benjamini-Hochberg false discovery rate procedure across
-the 43 state-specific tests. The nationwide model is a single test and is not in that family.
+the 43 state-specific tests, applied separately to each family of tests: the urban-rural odds
+ratio in Model 1, in Model 2 and in Model 3a, and the urban-rural x year interaction in Model 3b.
+The nationwide model is a single test and is not in any family.
 """
 import os
 
@@ -54,6 +57,13 @@ def s1_table(pe):
                           values=["OR", "LowerCL_OR", "UpperCL_OR", "ProbChiSq"], aggfunc="first")
     s1.columns = [a + "_M" + b for a, b in s1.columns]
     s1 = s1.reset_index().sort_values("State_Code")
+    # Benjamini-Hochberg q values across the 43 state-specific tests, separately for each model
+    # (the same family definition as the interaction tests). The nationwide row is not in a family.
+    states = s1.State_Code != 0
+    for m in ("1", "2", "3"):
+        s1["q_M" + m] = np.nan
+        s1.loc[states, "q_M" + m] = multipletests(s1.loc[states, "ProbChiSq_M" + m].values,
+                                                  alpha=0.05, method="fdr_bh")[1]
 
     g = pd.read_csv(os.path.join(MODELS_DIR, "nationwide_gee.csv"))
     g["Variable"] = g["Variable"].astype(str).str.strip()
@@ -67,14 +77,17 @@ def s1_table(pe):
         x = gu.loc[m]
         r[lab + " OR"] = "%.2f%s" % (x.OR, stars(x.P))
         r[lab + " 95% CI"] = ci(x.LowerCL_OR, x.UpperCL_OR)
+        r[lab + " q"] = "–"
     rows.append(r)
     for _, x in s1[s1.State_Code != 0].iterrows():
         r = {"State": x.State}
         for m, lab in (("1", "Model 1"), ("2", "Model 2"), ("3", "Model 3a")):
             r[lab + " OR"] = "%.2f%s" % (x["OR_M" + m], stars(x["ProbChiSq_M" + m]))
             r[lab + " 95% CI"] = ci(x["LowerCL_OR_M" + m], x["UpperCL_OR_M" + m])
+            r[lab + " q"] = fmt_p(x["q_M" + m])
         rows.append(r)
-    pd.DataFrame(rows).to_csv(os.path.join(TABLES_DIR, "S1_Table_urban_rural_ORs.csv"), index=False)
+    pd.DataFrame(rows).to_csv(os.path.join(TABLES_DIR, "S1_Table_urban_rural_ORs.csv"), index=False,
+                              encoding="utf-8-sig")
     return s1
 
 
@@ -139,6 +152,7 @@ def fig_inputs(s1, it, keep):
     for m in ("1", "2", "3"):
         chor["OR_Model" + m] = s1["OR_M" + m].values
         chor["PValue_Model" + m] = s1["ProbChiSq_M" + m].values
+        chor["QValue_Model" + m] = s1["q_M" + m].values
     chor["OR_Model3b_interaction"] = chor.State_Code.map(ib.OR)
     chor["PValue_Model3b_interaction"] = chor.State_Code.map(ib.ProbChiSq)
     chor.to_csv(os.path.join(MODELS_DIR, "state_or_summary.csv"), index=False)
@@ -208,6 +222,15 @@ def counts(s1, it, sl):
         L.append("Model %s: significant %d/%d; rural higher %d (OR %.2f-%.2f); rural lower %d [%s]"
                  % (lab, len(sig), n, len(hi), hi[oc].min(), hi[oc].max(), len(lo),
                     "; ".join("%s %.2f" % (a, b) for a, b in zip(lo.State, lo[oc])) or "none"))
+        qc = "q_M" + m
+        qsig = body[body[qc] < .05]
+        qhi, qlo = qsig[qsig[oc] > 1], qsig[qsig[oc] < 1]
+        lost = sig[sig[qc] >= .05].sort_values("State")
+        L.append("Model %s after FDR adjustment (q < .05): significant %d/%d; rural higher %d (OR %.2f-%.2f); "
+                 "rural lower %d; no longer significant: %s"
+                 % (lab, len(qsig), n, len(qhi), qhi[oc].min(), qhi[oc].max(), len(qlo),
+                    ", ".join("%s (P %s, q %s)" % (a, fmt_p(b), fmt_p(c))
+                              for a, b, c in zip(lost.State, lost[pc], lost[qc])) or "none"))
     st = it[it.State_Code != 0]
     sr, sb = st[st.sig_raw].sort_values("State"), st[st.sig_BH].sort_values("State")
     L.append("Interaction P < .05: %d/%d: %s" % (len(sr), n, ", ".join(sr.State)))
