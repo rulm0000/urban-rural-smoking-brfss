@@ -84,7 +84,7 @@ The outputs from the published run are in `output/` so results can be checked wi
 
 ## Archived copy
 
-Version 1.0.0 of this repository, including the analytic data file, is archived on Zenodo: https://doi.org/10.5281/zenodo.23018447
+Version 1.2.0 of this repository, including the analytic data file, is archived at UNC Dataverse: https://doi.org/10.15139/S3/E6VVVL. Version 1.0.0 is also archived on Zenodo: https://doi.org/10.5281/zenodo.23018447
 
 ## Data
 

@@ -14,10 +14,13 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.23018447
     description: Version 1.0.0
+  - type: doi
+    value: 10.15139/S3/E6VVVL
+    description: Version 1.2.0, UNC Dataverse
 repository-code: "https://github.com/rulm0000/urban-rural-smoking-brfss"
 license: MIT
-version: 1.1.0
-date-released: 2026-09-28
+version: 1.2.0
+date-released: 2026-10-14
 keywords:
   - BRFSS
   - smoking
