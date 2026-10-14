@@ -1,7 +1,9 @@
 """Step 10. Fig 1: urban-rural odds ratios by state, Models 1, 2 and 3a.
 
 Each state is drawn as an equal-size square in its approximate geographic position, so
-small states are as visible as large ones.
+small states are as visible as large ones. A state is colored by its odds ratio only when the
+odds ratio is significant after Benjamini-Hochberg false discovery rate adjustment across the
+43 state-specific tests for that model (q < .05); otherwise it is grey ("Non-significant").
 
 Input : output/models/state_or_summary.csv  (step 9)
 Output: output/figures/Fig1.tif (300 dpi, LZW, 7.5 in wide) and Fig1.png
@@ -24,10 +26,10 @@ COLORS = {"OR ≥ 1.50": "#034e7b", "1.25 < OR < 1.50": "#3690c0", "OR ≤ 1.25"
 DARK = {"OR ≥ 1.50", "1.25 < OR < 1.50"}
 
 
-def category(orv, p, present):
+def category(orv, q, present):
     if not present:
         return "Rural sample size: n < 50"
-    if pd.isna(orv) or pd.isna(p) or p >= 0.05:
+    if pd.isna(orv) or pd.isna(q) or q >= 0.05:
         return "Non-significant"
     if orv < 1.0:
         return "OR < 1.0"
@@ -43,16 +45,16 @@ def main():
     df = pd.read_csv(os.path.join(MODELS_DIR, "state_or_summary.csv"))
     df = df[df.State_Code != 0]
     res = df.assign(abbr=df.State_Code.astype(int).map(ABBR)).set_index("abbr")
-    models = [("Model 1", "OR_Model1", "PValue_Model1"), ("Model 2", "OR_Model2", "PValue_Model2"),
-              ("Model 3a", "OR_Model3", "PValue_Model3")]
+    models = [("Model 1", "OR_Model1", "QValue_Model1"), ("Model 2", "OR_Model2", "QValue_Model2"),
+              ("Model 3a", "OR_Model3", "QValue_Model3")]
 
     fig, axs = plt.subplots(2, 2, figsize=(7.5, 5.6))
     axs = axs.ravel()
-    for ax, (title, orc, pc) in zip(axs, models):
+    for ax, (title, orc, qc) in zip(axs, models):
         for ab, (r, c) in GRID.items():
             present = ab in res.index
             cat = category(res.at[ab, orc] if present else np.nan,
-                           res.at[ab, pc] if present else np.nan, present)
+                           res.at[ab, qc] if present else np.nan, present)
             ax.add_patch(Rectangle((c, -r), 0.92, 0.92, facecolor=COLORS[cat], edgecolor="white", linewidth=0.6))
             ax.text(c + 0.46, -r + 0.46, ab, ha="center", va="center", fontsize=6.5,
                     color="white" if cat in DARK else "black")

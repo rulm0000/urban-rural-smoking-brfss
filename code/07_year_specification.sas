@@ -1,6 +1,6 @@
 /*==========================================================================
   Step 7. Sensitivity analysis: specification of survey year, nationwide Model 3b
-  (S4 Table, Panel A). Survey design as in step 5.
+  (S3 Table, Panel A). Survey design as in step 5.
 
     LINEAR       survey year as a linear term (primary analysis)
     QUADRATIC    adds year squared and rural x year squared; joint Wald test of both

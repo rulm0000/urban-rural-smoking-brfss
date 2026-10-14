@@ -1,9 +1,11 @@
 /*==========================================================================
   Step 8. Sensitivity analysis: quadratic time trend within each of the 43 states
-  (S4 Table, Panel B). Model 3b plus year squared and rural x year squared, with Wald
-  tests of the quadratic terms. Survey design as in step 5.
+  (S3 Table, Panel B). Two models per state, survey design as in step 5:
+    - Model 3b plus year squared and rural x year squared, with Wald tests of the
+      quadratic terms (quad_joint: both terms; quad_gap: rural x year squared)
+    - Model 3b plus year squared only, with a Wald test of year squared (quad_year)
 
-  Output: output\models\state_quadratic.csv
+  Output: output\models\state_quadratic.csv (three tests per state, 129 rows)
 ==========================================================================*/
 options nosource nonotes;
 ods listing close; ods results off;
@@ -33,6 +35,7 @@ run;
     %local i st;
     %do i = 1 %to %sysfunc(countw(&STATES));
         %let st = %scan(&STATES, &i);
+        /* Model 3b + year squared + rural x year squared */
         proc surveylogistic data=d;
             where _STATE = &st;
             class _AGE_G SEXVAR _RACEGR3 _EDUCAG / param=GLM;
@@ -43,8 +46,18 @@ run;
             quad_gap:   test rural_x_yearsq = 0;
             ods output TestStmts=ts;
         run;
-        data ts_&st; set ts; State_Code = &st; run;
-        proc datasets lib=work nolist; delete ts; quit;
+        /* Model 3b + year squared only */
+        proc surveylogistic data=d;
+            where _STATE = &st;
+            class _AGE_G SEXVAR _RACEGR3 _EDUCAG / param=GLM;
+            model currentsmoker (event='1') = URRU year_centered year_sq rural_x_year
+                                              _AGE_G SEXVAR _RACEGR3 _EDUCAG;
+            weight _LLCPWT; strata _STSTR; cluster _PSU;
+            quad_year:  test year_sq = 0;
+            ods output TestStmts=ts2;
+        run;
+        data ts_&st; set ts ts2; State_Code = &st; run;
+        proc datasets lib=work nolist; delete ts ts2; quit;
     %end;
     data allq;
         set %do i = 1 %to %sysfunc(countw(&STATES)); %let st = %scan(&STATES, &i); ts_&st %end; ;

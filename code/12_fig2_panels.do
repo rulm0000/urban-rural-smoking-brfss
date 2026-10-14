@@ -1,11 +1,12 @@
 * ==============================================================================
 * Step 12. Fig 2: predicted probability of current smoking by urban-rural status,
 * 2018-2025 (Model 3b), with unadjusted prevalence, nationwide and for each state
-* with an urban-rural x year interaction P < .05.
+* whose urban-rural x year interaction is significant after Benjamini-Hochberg false
+* discovery rate adjustment (q < .05; the Table 2 rows).
 *
 * Run from the repository root (run_all.ps1 does this).
 * Inputs : data/derived/brfss_2018_2025_analytic.csv   (step 2)
-*          output/models/fig2_entities.do              (step 9: panels and P/q labels)
+*          output/models/fig2_entities.do              (step 9: panels and q labels)
 * Outputs: output/figures/Fig2.png
 *          output/models/fig2_plotted_values.csv       (every plotted value)
 *
@@ -14,8 +15,10 @@
 *     treated as certainty units, matching PROC SURVEYLOGISTIC in the SAS models.
 *   - Prevalence dots and fitted lines use the same complete-case analytic sample.
 *   - Fitted lines are drawn only over the years a state contributes data.
-*   - The label in each panel gives the interaction P value and the Benjamini-Hochberg
-*     q value; bold = still significant after false discovery rate adjustment.
+*   - The label in each panel gives the Benjamini-Hochberg q value of the interaction
+*     (the unadjusted P for the nationwide panel, which is not in an FDR family).
+*   - Layout: 3 columns, panels in Table 2 order, legend in the next free cell; the
+*     number of rows and the figure height follow the number of panels.
 * ==============================================================================
 clear all
 set more off

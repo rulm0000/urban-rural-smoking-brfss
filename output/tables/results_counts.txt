@@ -1,12 +1,20 @@
 estimable states: 43
+Nationwide urban-rural OR (GEE): Model 1 1.58 (1.45, 1.72), P <.001; Model 2 1.55 (1.45, 1.67), P <.001; Model 3a 1.25 (1.17, 1.33), P <.001
 Model 1: significant 39/43; rural higher 39 (OR 1.08-1.92); rural lower 0 [none]
 Model 1 after FDR adjustment (q < .05): significant 39/43; rural higher 39 (OR 1.08-1.92); rural lower 0; no longer significant: none
+Model 1 after FDR adjustment, out of 43: rural higher 39/43 (90.7%; OR 1.08-1.92); rural lower 0 (none); not significant 4/43 (9.3%)
 Model 2: significant 39/43; rural higher 39 (OR 1.13-1.84); rural lower 0 [none]
 Model 2 after FDR adjustment (q < .05): significant 39/43; rural higher 39 (OR 1.13-1.84); rural lower 0; no longer significant: none
+Model 2 after FDR adjustment, out of 43: rural higher 39/43 (90.7%; OR 1.13-1.84); rural lower 0 (none); not significant 4/43 (9.3%)
 Model 3a: significant 20/43; rural higher 19 (OR 1.10-1.48); rural lower 1 [Wyoming 0.89]
 Model 3a after FDR adjustment (q < .05): significant 18/43; rural higher 17 (OR 1.16-1.48); rural lower 1; no longer significant: North Dakota (P .023, q .052), South Carolina (P .036, q .078)
+Model 3a after FDR adjustment, out of 43: rural higher 17/43 (39.5%; OR 1.16-1.48); rural lower 1 (Wyoming: OR 0.89, 95% CI (0.80, 0.98), q .034); not significant 25/43 (58.1%)
 Interaction P < .05: 10/43: Arkansas, Kansas, Kentucky, Maine, Missouri, Montana, Nebraska, Oregon, Washington, West Virginia
 Interaction q < .05: 6/43: Arkansas, Kansas, Montana, Nebraska, Washington, West Virginia
+Interaction after FDR adjustment, out of 43: significant (q < .05; Table 2 rows and Fig 2 panels) 6/43 (14.0%); not significant (q >= .05) 37/43 (86.0%)
 Significant interactions with OR < 1 (narrowing gap): none
 Nationwide interaction: OR 1.020 (1.011, 1.030), P <.001
 Nationwide annual OR: urban 0.94 (0.93, 0.94), rural 0.96 (0.95, 0.97)
+State quadratic, year² alone (Model 3b + year²): P < .05 9/43 [Arizona, Georgia, Idaho, Michigan, Minnesota, Mississippi, New Mexico, Tennessee, Vermont]; q < .05 5/43 [Arizona, Michigan, Minnesota, Mississippi, Vermont]
+State quadratic, rural × year² (Model 3b + year² + rural × year²): P < .05 4/43 [Arizona, Idaho, Indiana, Utah]; q < .05 0/43 [none]
+State quadratic, joint test of year² and rural × year² (same model): P < .05 9/43 [Arizona, Georgia, Idaho, Michigan, Minnesota, Mississippi, New Mexico, Utah, Vermont]; q < .05 4/43 [Arizona, Michigan, Minnesota, Vermont]

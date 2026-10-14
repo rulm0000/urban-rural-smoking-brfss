@@ -41,13 +41,13 @@ A full run takes about 20 minutes on a laptop, mostly the SAS models.
 |---|---|---|
 | 1 | `code/01_download_brfss.py` | BRFSS 2018-2025 files, verified by checksum |
 | 2 | `code/02_build_analytic_file.py` | `data/derived/brfss_2018_2025_analytic.csv` (or unpacks it from the archived copy) |
-| 3 | `code/03_descriptives.py` | Table 1, S2 Table, S3 Table (sample flow and state-by-year counts) |
+| 3 | `code/03_descriptives.py` | Table 1, S1 Table, sample flow and state-by-year counts (`sample_flow.csv`, `state_by_year.csv`) |
 | 4 | `code/04_import_analytic_file.sas` | SAS copy of the analytic file |
 | 5 | `code/05_state_models.sas` | Survey logistic models, nationwide and 43 states (Models 1, 2, 3a, 3b) |
 | 6 | `code/06_nationwide_gee.sas` | Nationwide survey-weighted GEE models, clustered by state |
-| 7 | `code/07_year_specification.sas` | Linear, quadratic and categorical survey year (S4 Table, Panel A) |
-| 8 | `code/08_state_quadratic.sas` | Quadratic trend within each state (S4 Table, Panel B) |
-| 9 | `code/09_model_tables.py` | Table 2, S1 Table, S4 Table, and the counts quoted in the Results |
+| 7 | `code/07_year_specification.sas` | Linear, quadratic and categorical survey year (S3 Table, Panel A) |
+| 8 | `code/08_state_quadratic.sas` | Quadratic trend within each state (S3 Table, Panel B) |
+| 9 | `code/09_model_tables.py` | Table 2, S2 Table, S3 Table, the counts quoted in the Results (`results_counts.txt`), and the table and figure captions (`table_captions.md`) |
 | 10 | `code/10_fig1_tilegrid.py` | Fig 1 |
 | 11 | `code/11_s1_fig_tilegrid.py` | S1 Fig |
 | 12 | `code/12_fig2_panels.do` | Fig 2 |
@@ -76,11 +76,11 @@ The outputs from the published run are in `output/` so results can be checked wi
 - **Outcome:** current cigarette smoking (`_RFSMOK3`).
 - **Exposure:** urban vs rural county of residence (`_URBSTAT`, NCHS Urban-Rural Classification Scheme for Counties).
 - **Covariates:** age group, sex, race/ethnicity and education.
-- **Analytic sample:** complete cases (S3 Table).
+- **Analytic sample:** complete cases (`output/tables/sample_flow.csv`).
 - **Survey design:** every model uses the BRFSS final weight (`_LLCPWT`), stratum (`_STSTR`) and primary sampling unit (`_PSU`) as provided by CDC for each survey year.
   - State models: `PROC SURVEYLOGISTIC` (Taylor-series linearization).
   - Nationwide models: survey-weighted generalized estimating equations with standard errors clustered by state (`PROC GENMOD`).
-- **Multiple testing:** q values control the false discovery rate across the 43 state-specific interaction tests (Benjamini-Hochberg).
+- **Multiple testing:** q values control the false discovery rate (Benjamini-Hochberg) across the 43 state-specific tests, separately for each family: the urban-rural odds ratio in Models 1, 2 and 3a, and the urban-rural x year interaction in Model 3b. A state-specific result is significant when q < .05.
 
 ## Archived copy
 

@@ -1,18 +1,23 @@
 """Step 3. Descriptive tables, computed directly from the analytic file.
 
 Outputs (output/tables/):
-  Table1_sample_characteristics.csv  Table 1: weighted percentages and smoking prevalence,
-                                     complete-case analytic sample
-  Table1_header_numbers.txt          sample sizes and state ranges quoted in the text
-  S2_Table_state_prevalence.csv      S2 Table: rural and urban smoking prevalence by state,
-                                     2018 and 2025, with 95% CIs and rural/urban ratios
-  S3_Table_A_sample_flow.csv         S3 Table, Panel A: exclusion steps (flow diagram)
-  S3_Table_B_state_by_year.csv       S3 Table, Panel B: analytic-sample size by state and year
+  Table1_sample_characteristics.csv         Table 1 as printed in the manuscript: unweighted n
+                                            (weighted %) and weighted smoking prevalence,
+                                            complete-case analytic sample
+  Table1_sample_characteristics_values.csv  the same numbers unrounded, with weighted counts
+  Table1_header_numbers.txt                 sample sizes and state ranges quoted in the text
+  S1_Table_state_prevalence.csv             S1 Table: rural and urban smoking prevalence by
+                                            state, 2018 and 2025, with 95% CIs and rural:urban
+                                            ratios
+  sample_flow.csv                           exclusion steps from all respondents to the
+                                            analytic samples (supporting file)
+  state_by_year.csv                         analytic-sample size by state and survey year
+                                            (supporting file)
 
 Prevalence estimates exclude respondents with missing smoking status from numerator and
-denominator. Weighted counts in Table 1 use _LLCPWT / 8, so they describe an average annual
-population. S2 Table CIs use the Kish effective sample size; estimates are suppressed when
-the unweighted n < 50 or the relative standard error > 30%.
+denominator. Weighted percentages in Table 1 use _LLCPWT / 8, so they describe an average
+annual population. S1 Table CIs use the Kish effective sample size; estimates are suppressed
+when the unweighted n < 50 or the relative standard error > 30%.
 """
 import os
 
@@ -58,8 +63,16 @@ def table1(cc, n_all):
                          "Weighted n (avg annual)": round(wsum),
                          "Percentage": 100 * wsum / W,
                          "Smoking prevalence": 100 * (g["w"] * g["currentsmoker"]).sum() / wsum})
-    t = pd.DataFrame(rows).round({"Percentage": 4, "Smoking prevalence": 4})
-    t.to_csv(os.path.join(TABLES_DIR, "Table1_sample_characteristics.csv"), index=False)
+    t = pd.DataFrame(rows)
+    # Manuscript format: "2,619,997 (93.6%)" and "12.7%" (unweighted n, weighted %, one decimal)
+    pd.DataFrame({"Variable": t["Variable"], "Category": t["Category"],
+                  "Sample Size (%)": ["{:,} ({:.1f}%)".format(n, p)
+                                      for n, p in zip(t["Unweighted n"], t["Percentage"])],
+                  "Smoking prevalence": ["{:.1f}%".format(p) for p in t["Smoking prevalence"]]}
+                 ).to_csv(os.path.join(TABLES_DIR, "Table1_sample_characteristics.csv"), index=False,
+                          encoding="utf-8-sig")
+    t.round({"Percentage": 4, "Smoking prevalence": 4}).to_csv(
+        os.path.join(TABLES_DIR, "Table1_sample_characteristics_values.csv"), index=False)
 
     states = df[~df["_STATE"].isin(ZERO_RURAL)]
     per = states.groupby("_STATE").agg(n=("URRU", "size"),
@@ -85,7 +98,7 @@ def table1(cc, n_all):
     print("\n".join(lines))
 
 
-# --------------------------------------------------------------------------- S3 Panel A
+# --------------------------------------------------------------------------- sample flow
 def sample_flow(df):
     steps = [
         ("Current smoking status missing, don't know, or refused", df.currentsmoker.notna()),
@@ -113,11 +126,11 @@ def sample_flow(df):
                  "Remaining": len(cc) - len(z)})
     t = pd.DataFrame(rows)
     t["Percent of initial"] = (100 * t.Remaining / len(df)).round(1)
-    t.to_csv(os.path.join(TABLES_DIR, "S3_Table_A_sample_flow.csv"), index=False)
+    t.to_csv(os.path.join(TABLES_DIR, "sample_flow.csv"), index=False)
     print(t.to_string(index=False))
 
 
-# --------------------------------------------------------------------------- S2 Table
+# --------------------------------------------------------------------------- S1 Table
 def prev_ci(g):
     w, y, n = g["_LLCPWT"], g["currentsmoker"], len(g)
     if n == 0 or w.sum() == 0:
@@ -131,7 +144,7 @@ def prev_ci(g):
                           suppressed=(n < 50) or (rse > 30)))
 
 
-def s2_and_availability(cc):
+def s1_and_state_by_year(cc):
     df = cc.copy()
     df["year"] = (df["year_centered"] + 2020).astype(int)
     df = df[~df["_STATE"].isin(ZERO_RURAL)]
@@ -139,7 +152,7 @@ def s2_and_availability(cc):
     grid = df.groupby(["_STATE", "year"]).size().unstack(fill_value=0)
     grid.index = [FIPS[int(i)] for i in grid.index]
     grid.index.name = "State"
-    grid.to_csv(os.path.join(TABLES_DIR, "S3_Table_B_state_by_year.csv"))
+    grid.to_csv(os.path.join(TABLES_DIR, "state_by_year.csv"))
 
     sub = df[df["year"].isin([2018, 2025])]
     res = sub.groupby(["_STATE", "year", "URRU"]).apply(prev_ci, include_groups=False).reset_index()
@@ -162,10 +175,6 @@ def s2_and_availability(cc):
             r[f"_ratio_{yr}"] = ru / ur if ok else np.nan
         d = r["_ratio_2025"] - r["_ratio_2018"]
         r["Change in ratio"] = f"{d:+.2f}" if pd.notna(d) else "—"
-        yrs = grid.loc[FIPS[int(st)]]
-        present = [y for y in yrs.index if yrs[y] > 0]
-        r["Years available"] = f"{min(present)}-{max(present)}" + \
-            ("" if len(present) == len(YEARS) else f" ({len(present)} of {len(YEARS)})")
         rows.append(r)
 
     nat = {"State": "Nationwide (43 states)"}
@@ -177,15 +186,18 @@ def s2_and_availability(cc):
         nat[f"_ratio_{yr}"] = nat[f"_Rural_{yr}"] / nat[f"_Urban_{yr}"]
         nat[f"Ratio {yr}"] = f"{nat[f'_ratio_{yr}']:.2f}"
     nat["Change in ratio"] = f"{nat['_ratio_2025'] - nat['_ratio_2018']:+.2f}"
-    nat["Years available"] = "2018-2025"
     rows.insert(0, nat)
 
-    t = pd.DataFrame(rows)
-    show = ["State", "Rural 2018", "Urban 2018", "Ratio 2018", "Rural 2025", "Urban 2025",
-            "Ratio 2025", "Change in ratio", "Years available"]
-    t[show].to_csv(os.path.join(TABLES_DIR, "S2_Table_state_prevalence.csv"), index=False,
-                   encoding="utf-8-sig")
-    print(t[show].head(5).to_string(index=False))
+    # column headers as in the S1 Table Word file
+    show = {"State": "State",
+            "Rural 2018": "Rural 2018 % (95% CI)", "Urban 2018": "Urban 2018 % (95% CI)",
+            "Ratio 2018": "Rural:urban ratio 2018",
+            "Rural 2025": "Rural 2025 % (95% CI)", "Urban 2025": "Urban 2025 % (95% CI)",
+            "Ratio 2025": "Rural:urban ratio 2025", "Change in ratio": "Change in ratio"}
+    t = pd.DataFrame(rows)[list(show)].rename(columns=show)
+    t.to_csv(os.path.join(TABLES_DIR, "S1_Table_state_prevalence.csv"), index=False,
+             encoding="utf-8-sig")
+    print(t.head(5).to_string(index=False))
 
 
 def main():
@@ -194,7 +206,7 @@ def main():
     cc = analytic_sample(df)
     table1(cc, len(df))
     sample_flow(df)
-    s2_and_availability(cc)
+    s1_and_state_by_year(cc)
     print("wrote tables to", TABLES_DIR)
 
 

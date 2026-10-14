@@ -88,11 +88,3 @@ def fmt_p(p):
     if pd.isna(p):
         return ""
     return "<.001" if p < .001 else ("%.3f" % p).lstrip("0")
-
-
-def stars(p):
-    """Significance stars used in S1 Table (*P<.05, **P<.01, ***P<.001)."""
-    import pandas as pd
-    if pd.isna(p):
-        return ""
-    return "***" if p < .001 else "**" if p < .01 else "*" if p < .05 else ""
