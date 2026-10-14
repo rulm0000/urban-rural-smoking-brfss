@@ -57,7 +57,7 @@ Eight jurisdictions had no rural respondents in 2018-2024 and are excluded from 
 
 US territories are not classified by NCHS.
 
-Some states are missing a survey year in the public-use files. For example, California, Mississippi and Nevada have no 2025 data, and Tennessee has no 2024 data. S3 Table, Panel B lists the sample size by state and year.
+Some states are missing a survey year in the public-use files. For example, California, Mississippi and Nevada have no 2025 data, and Tennessee has no 2024 data. `output/tables/state_by_year.csv` lists the sample size by state and year.
 
 ## Terms of use
 
