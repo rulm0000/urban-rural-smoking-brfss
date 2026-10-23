@@ -50,8 +50,8 @@ A full run takes about 20 minutes on a laptop, mostly the SAS models.
 | 9 | `code/09_model_tables.py` | Table 2, S2 Table, S3 Table, the counts quoted in the Results (`results_counts.txt`), and the table and figure captions (`table_captions.md`) |
 | 10 | `code/10_fig1_tilegrid.py` | Fig 1 |
 | 11 | `code/11_s1_fig_tilegrid.py` | S1 Fig |
-| 12 | `code/12_fig2_panels.do` | Fig 2 |
-| 13 | `code/13_fig2_tiff.py` | Fig 2 as a 300 dpi TIFF |
+| 12 | `code/12_fig2_predictions.do` | Survey-weighted predicted probabilities and unadjusted prevalence for Fig 2 (`fig2_plotted_values.csv`) |
+| 13 | `code/13_fig2_panels.py` | Fig 2 (2 columns, legend in the last cell), drawn from the step 12 values |
 
 ## Repository layout
 
@@ -84,7 +84,7 @@ The outputs from the published run are in `output/` so results can be checked wi
 
 ## Archived copy
 
-Version 1.2.0 of this repository, including the analytic data file, is archived at UNC Dataverse: https://doi.org/10.15139/S3/E6VVVL. Version 1.0.0 is also archived on Zenodo: https://doi.org/10.5281/zenodo.23018447
+Version 1.2.0 of this repository, including the analytic data file, is archived at UNC Dataverse: https://doi.org/10.15139/S3/E6VVVL. Since that version, the only change is how Fig 2 is drawn (two columns, drawn in Python from the Stata estimates); every estimate is the same. Version 1.0.0 is also archived on Zenodo: https://doi.org/10.5281/zenodo.23018447
 
 ## Data
 

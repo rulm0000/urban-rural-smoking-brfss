@@ -22,7 +22,7 @@ Outputs (output/tables/):
                                       Fig 1, Fig 2 and S1 Fig as they read in the manuscript
 Outputs (output/models/):
   state_or_summary.csv                input for Fig 1 (OR, P and q per model and state)
-  fig2_entities.do                    panels and q labels for Fig 2 (read by step 12):
+  fig2_entities.do                    panels and q labels for Fig 2 (read by steps 12 and 13):
                                       nationwide + states with interaction q < .05
 
 Multiple testing: q values use the Benjamini-Hochberg false discovery rate procedure across

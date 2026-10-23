@@ -15,8 +15,8 @@
       9  Python  model tables (Table 2, S2 Table, S3 Table, results counts, captions)
       10 Python  Fig 1
       11 Python  S1 Fig
-      12 Stata   Fig 2
-      13 Python  Fig 2 TIFF
+      12 Stata   Fig 2 predicted probabilities
+      13 Python  Fig 2
 
 .PARAMETER RawDir
     Folder holding (or to receive) LLCP2018.XPT ... LLCP2025.XPT. Default: data\raw.
@@ -117,8 +117,8 @@ $steps = @(
     @(9,  "Model tables",                        { Run-Python "09_model_tables.py" }),
     @(10, "Fig 1",                               { Run-Python "10_fig1_tilegrid.py" }),
     @(11, "S1 Fig",                              { Run-Python "11_s1_fig_tilegrid.py" }),
-    @(12, "Stata: Fig 2",                        { Run-Stata "12_fig2_panels.do" }),
-    @(13, "Fig 2 TIFF",                          { Run-Python "13_fig2_tiff.py" })
+    @(12, "Stata: Fig 2 predictions",            { Run-Stata "12_fig2_predictions.do" }),
+    @(13, "Fig 2",                               { Run-Python "13_fig2_panels.py" })
 )
 
 $t0 = Get-Date
