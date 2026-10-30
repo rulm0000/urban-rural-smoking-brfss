@@ -13,10 +13,10 @@
       7  SAS     year-specification sensitivity analysis
       8  SAS     state quadratic-trend sensitivity analysis
       9  Python  model tables (Table 2, S2 Table, S3 Table, results counts, captions)
-      10 Python  Fig 1
-      11 Python  S1 Fig
+      10 Python  Fig 1 (US state map of the urban-rural odds ratios)
+      11 Python  S1 Fig (US state maps of rural and urban smoking prevalence)
       12 Stata   Fig 2 predicted probabilities
-      13 Python  Fig 2
+      13 Python  Fig 2 (predicted probabilities with 95% CIs)
 
 .PARAMETER RawDir
     Folder holding (or to receive) LLCP2018.XPT ... LLCP2025.XPT. Default: data\raw.
@@ -115,8 +115,8 @@ $steps = @(
     @(7,  "SAS: year-specification sensitivity", { Run-Sas "07_year_specification.sas" }),
     @(8,  "SAS: state quadratic sensitivity",    { Run-Sas "08_state_quadratic.sas" }),
     @(9,  "Model tables",                        { Run-Python "09_model_tables.py" }),
-    @(10, "Fig 1",                               { Run-Python "10_fig1_tilegrid.py" }),
-    @(11, "S1 Fig",                              { Run-Python "11_s1_fig_tilegrid.py" }),
+    @(10, "Fig 1: state map",                    { Run-Python "10_fig1_map.py" }),
+    @(11, "S1 Fig: state maps",                  { Run-Python "11_s1_fig_map.py" }),
     @(12, "Stata: Fig 2 predictions",            { Run-Stata "12_fig2_predictions.do" }),
     @(13, "Fig 2",                               { Run-Python "13_fig2_panels.py" })
 )

@@ -1,19 +1,22 @@
 * ==============================================================================
 * Step 12. Fig 2 values: predicted probability of current smoking by urban-rural
-* status, 2018-2025 (Model 3b), with unadjusted prevalence, nationwide and for each
-* state whose urban-rural x year interaction is significant after Benjamini-Hochberg
-* false discovery rate adjustment (q < .05; the Table 2 rows). Step 13 draws Fig 2
-* from the values written here.
+* status, 2018-2025 (Model 3b), nationwide and for each state whose urban-rural x
+* year interaction is significant after Benjamini-Hochberg false discovery rate
+* adjustment (BH-adjusted p-value < .05; the Table 2 rows). Step 13 draws Fig 2
+* (the predicted probabilities and their 95% CIs) from the values written here.
 *
 * Run from the repository root (run_all.ps1 does this).
 * Inputs : data/derived/brfss_2018_2025_analytic.csv   (step 2)
-*          output/models/fig2_entities.do              (step 9: panels and q labels)
-* Output : output/models/fig2_plotted_values.csv       (every plotted value)
+*          output/models/fig2_entities.do              (step 9: panel FIPS codes and names)
+* Output : output/models/fig2_plotted_values.csv       (every value behind Fig 2, plus the
+*                                                       unadjusted prevalence column, prev,
+*                                                       which the figure no longer draws)
 *
 * Notes
 *   - Survey design: svyset _psu [pweight=_llcpwt], strata(_ststr). Single-PSU strata are
 *     treated as certainty units, matching PROC SURVEYLOGISTIC in the SAS models.
-*   - Prevalence dots and fitted lines use the same complete-case analytic sample.
+*   - The unadjusted prevalence and the predicted probabilities use the same complete-case
+*     analytic sample.
 *   - Fitted values are kept only for the years a state contributes data.
 * ==============================================================================
 clear all

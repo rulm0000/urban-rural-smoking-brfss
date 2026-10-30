@@ -45,13 +45,13 @@ A full run takes about 20 minutes on a laptop, mostly the SAS models.
 | 4 | `code/04_import_analytic_file.sas` | SAS copy of the analytic file |
 | 5 | `code/05_state_models.sas` | Survey logistic models, nationwide and 43 states (Models 1, 2, 3a, 3b) |
 | 6 | `code/06_nationwide_gee.sas` | Nationwide survey-weighted GEE models, clustered by state |
-| 7 | `code/07_year_specification.sas` | Linear, quadratic and categorical survey year (S3 Table, Panel A) |
-| 8 | `code/08_state_quadratic.sas` | Quadratic trend within each state (S3 Table, Panel B) |
-| 9 | `code/09_model_tables.py` | Table 2, S2 Table, S3 Table, the counts quoted in the Results (`results_counts.txt`), and the table and figure captions (`table_captions.md`) |
-| 10 | `code/10_fig1_tilegrid.py` | Fig 1 |
-| 11 | `code/11_s1_fig_tilegrid.py` | S1 Fig |
-| 12 | `code/12_fig2_predictions.do` | Survey-weighted predicted probabilities and unadjusted prevalence for Fig 2 (`fig2_plotted_values.csv`) |
-| 13 | `code/13_fig2_panels.py` | Fig 2 (2 columns, legend in the last cell), drawn from the step 12 values |
+| 7 | `code/07_year_specification.sas` | Linear, quadratic and categorical survey year, nationwide (S3 Table, panel 3a uses the quadratic model) |
+| 8 | `code/08_state_quadratic.sas` | Quadratic trend within each state (S3 Table, panel 3b) |
+| 9 | `code/09_model_tables.py` | Table 2, S2 Table, S3 Table, the counts quoted in the Results (`results_counts.txt`), the table and figure captions (`table_captions.md`), the Fig 1 input (`state_or_summary.csv`) and the list of Fig 2 panels (`fig2_entities.do`) |
+| 10 | `code/10_fig1_map.py` | Fig 1: US state map of the urban-rural odds ratios (Models 1, 2 and 3a), with Alaska and Hawaii as insets |
+| 11 | `code/11_s1_fig_map.py` | S1 Fig: US state maps of smoking prevalence, rural and urban, 2018 and 2025 |
+| 12 | `code/12_fig2_predictions.do` | Survey-weighted predicted probabilities and 95% CIs for Fig 2, plus unadjusted prevalence for reference (`fig2_plotted_values.csv`) |
+| 13 | `code/13_fig2_panels.py` | Fig 2 (2 columns, legend in the last cell): predicted probability lines with 95% CI bands, drawn from the step 12 values |
 
 ## Repository layout
 
@@ -66,6 +66,7 @@ output/tables/         manuscript and supplement tables (CSV)
 output/figures/        Fig 1, Fig 2, S1 Fig (PNG and TIFF)
 output/models/         model estimates from SAS and Stata
 output/logs/           run logs (not tracked)
+resources/             US state boundaries for Fig 1 and S1 Fig (US Census Bureau shapefile)
 ```
 
 The outputs from the published run are in `output/` so results can be checked without re-running. A new run overwrites them, and `git diff` shows any difference.
@@ -80,11 +81,11 @@ The outputs from the published run are in `output/` so results can be checked wi
 - **Survey design:** every model uses the BRFSS final weight (`_LLCPWT`), stratum (`_STSTR`) and primary sampling unit (`_PSU`) as provided by CDC for each survey year.
   - State models: `PROC SURVEYLOGISTIC` (Taylor-series linearization).
   - Nationwide models: survey-weighted generalized estimating equations with standard errors clustered by state (`PROC GENMOD`).
-- **Multiple testing:** q values control the false discovery rate (Benjamini-Hochberg) across the 43 state-specific tests, separately for each family: the urban-rural odds ratio in Models 1, 2 and 3a, and the urban-rural x year interaction in Model 3b. A state-specific result is significant when q < .05.
+- **Multiple testing:** Benjamini-Hochberg (BH) adjusted p-values control the false discovery rate across the 43 state-specific tests, separately for each family: the urban-rural odds ratio in Models 1, 2 and 3a, and the urban-rural x year interaction in Model 3b. A state-specific result is significant when its BH-adjusted p-value is < .05.
 
 ## Archived copy
 
-Version 1.2.0 of this repository, including the analytic data file, is archived at UNC Dataverse: https://doi.org/10.15139/S3/E6VVVL. Since that version, the only change is how Fig 2 is drawn (two columns, drawn in Python from the Stata estimates); every estimate is the same. Version 1.0.0 is also archived on Zenodo: https://doi.org/10.5281/zenodo.23018447
+Version 1.2.0 of this repository, including the analytic data file, is archived at UNC Dataverse: https://doi.org/10.15139/S3/E6VVVL. Since that version, the only changes are in presentation: Fig 1 and S1 Fig are geographic state maps drawn on the US Census Bureau boundary file; Fig 2 is simpler (two columns, drawn in Python from the Stata estimates, showing only the predicted probabilities and their 95% CIs); Table 2 and S3 Table have a new layout; and the tables and captions call the false discovery rate-adjusted value the BH-adjusted p-value. Every estimate is the same. Version 1.0.0 is also archived on Zenodo: https://doi.org/10.5281/zenodo.23018447
 
 ## Data
 
@@ -93,6 +94,8 @@ BRFSS data are collected by the Centers for Disease Control and Prevention (CDC)
 Source: Centers for Disease Control and Prevention (CDC). Behavioral Risk Factor Surveillance System Survey Data. Atlanta, Georgia: U.S. Department of Health and Human Services, Centers for Disease Control and Prevention, 2018-2025.
 
 Use of these data does not imply endorsement by CDC.
+
+State boundaries in Fig 1 and S1 Fig: US Census Bureau, 2023 Cartographic Boundary File, States, 1:20,000,000 (`cb_2023_us_state_20m`), <https://www2.census.gov/geo/tiger/GENZ2023/shp/cb_2023_us_state_20m.zip>. The unzipped files are kept unchanged in `resources/`. They are a work of the US government and in the public domain.
 
 ## License
 

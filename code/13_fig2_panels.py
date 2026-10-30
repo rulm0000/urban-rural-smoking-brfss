@@ -1,14 +1,14 @@
 """Step 13. Fig 2: predicted probability of current smoking by urban-rural status,
-2018-2025 (Model 3b), with unadjusted prevalence, nationwide and for each state whose
-urban-rural x year interaction is significant after false discovery rate adjustment.
+2018-2025 (Model 3b), nationwide and for each state whose urban-rural x year interaction
+is significant after false discovery rate adjustment.
 
-Draws the values that step 12 (Stata) estimated. Panels follow the Table 2 order in two
-columns, with the legend in the next free cell. The label in each panel is the
-Benjamini-Hochberg q value of the interaction (the unadjusted P for the nationwide panel,
-which is not in an FDR family), with the letter q or P in italics.
+Draws the predicted probabilities that step 12 (Stata) estimated: one line per group with
+its 95% CI as a shaded band. Panels follow the Table 2 order in two columns, with the
+legend in the next free cell. No text other than the panel names, axes and legend is drawn
+in the figure.
 
-Inputs : output/models/fig2_plotted_values.csv  (step 12)
-         output/models/fig2_entities.do         (step 9: panel order and q labels)
+Inputs : output/models/fig2_plotted_values.csv  (step 12; the prev column is not drawn)
+         output/models/fig2_entities.do         (step 9: panel names and order)
 Output : output/figures/Fig2.tif (300 dpi, LZW, 7.5 in wide) and Fig2.png
 """
 import os
@@ -40,25 +40,20 @@ def has_font(name):
 
 
 def panels():
-    """Panel names and q labels, in Table 2 order, from fig2_entities.do."""
+    """Panel names, in Table 2 order, from fig2_entities.do."""
     text = open(os.path.join(MODELS_DIR, "fig2_entities.do"), encoding="utf-8").read()
-    names = re.findall(r'"([^"]+)"', re.search(r"local entity_names `\"(.*)\"'", text).group(1))
-    labels = [re.search(r'local s%d "([^"]*)"' % (i + 1), text).group(1) for i in range(len(names))]
-    return names, labels
+    return re.findall(r'"([^"]+)"', re.search(r"local entity_names `\"(.*)\"'", text).group(1))
 
 
 def main():
     ensure_dirs()
     vals = pd.read_csv(os.path.join(MODELS_DIR, "fig2_plotted_values.csv"))
-    names, labels = panels()
+    names = panels()
     n = len(names)
     nrow = -(-(n + 1) // NCOL)
 
     font = next((f for f in ("Arial", "Liberation Sans") if has_font(f)), "DejaVu Sans")
-    # the statistic letter (q or P) in each panel label is set in italics
-    plt.rcParams.update({"font.family": font, "font.size": 9, "mathtext.fontset": "custom",
-                         "mathtext.rm": font, "mathtext.it": font + ":italic",
-                         "mathtext.bf": font + ":bold", "mathtext.sf": font, "mathtext.cal": font})
+    plt.rcParams.update({"font.family": font, "font.size": 9})
     fig, axes = plt.subplots(nrow, NCOL, figsize=(7.5, 2.05 * nrow + 0.45), squeeze=False)
     fig.subplots_adjust(left=0.11, right=0.985, top=0.975, bottom=0.075, wspace=0.07, hspace=0.42)
 
@@ -72,13 +67,8 @@ def main():
         for u, col, ls in series:
             s = d[d.urru == u].sort_values("year")
             ax.plot(s.year, s.pred, color=col, lw=1.3, ls=ls, zorder=3)
-        for u, col, _ in series:
-            s = d[d.urru == u].sort_values("year")
-            ax.scatter(s.year, s.prev, s=22, color=col, zorder=4, linewidths=0)
 
         ax.set_title(name, fontsize=10, pad=3)
-        label = r"$\mathit{%s}$%s" % (labels[i][0], labels[i][1:])   # e.g. q = .023, P < .001
-        ax.text(0.985, 0.04, label, transform=ax.transAxes, ha="right", va="bottom", fontsize=8.5)
         ax.set_ylim(0, 0.30)
         ax.set_xlim(YEARS[0] - 0.4, YEARS[-1] + 0.4)
         ax.set_yticks([0, .05, .10, .15, .20, .25, .30])
@@ -106,11 +96,8 @@ def main():
     handles = [Line2D([], [], color=URBAN, lw=1.6, ls="-"),
                Line2D([], [], color=RURAL, lw=1.6, ls=DASH),
                Patch(facecolor=URBAN, alpha=0.18, lw=0),
-               Patch(facecolor=RURAL, alpha=0.18, lw=0),
-               Line2D([], [], color=URBAN, marker="o", ls="none", ms=5.5),
-               Line2D([], [], color=RURAL, marker="o", ls="none", ms=5.5)]
-    texts = ["Urban, predicted probability", "Rural, predicted probability", "Urban, 95% CI",
-             "Rural, 95% CI", "Urban, unadjusted prevalence", "Rural, unadjusted prevalence"]
+               Patch(facecolor=RURAL, alpha=0.18, lw=0)]
+    texts = ["Urban", "Rural", "Urban, 95% CI", "Rural, 95% CI"]
     legend_ax.legend(handles, texts, loc="center", frameon=False, fontsize=9.5, handlelength=2.6,
                      labelspacing=0.75, borderaxespad=0)
 

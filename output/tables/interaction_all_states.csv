@@ -1,4 +1,4 @@
-State_Code,State,Estimate,StdErr,OR,LowerCL_OR,UpperCL_OR,ProbChiSq,q_BH,sig_raw,sig_BH
+State_Code,State,Estimate,StdErr,OR,LowerCL_OR,UpperCL_OR,ProbChiSq,BH_adjusted_p,sig_raw,sig_BH
 0,Nationwide,0.0202,0.00468,1.0203764895,1.0110667471,1.0297719546,5e-05,,True,False
 1,Alabama,0.0301,0.024,1.0305061672,0.9832086079,1.0800789905,0.21,0.4714363636363636,False,False
 2,Alaska,-0.00866,0.0216,0.9913744543,0.9502031807,1.0343296345,0.6889,0.8976575757575757,False,False

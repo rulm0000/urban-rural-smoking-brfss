@@ -4,4 +4,6 @@ pyreadstat>=1.2
 scipy>=1.12
 statsmodels>=0.14
 matplotlib>=3.8
+geopandas>=1.0
+shapely>=2.0
 pillow>=10.0

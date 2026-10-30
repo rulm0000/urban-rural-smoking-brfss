@@ -5,3 +5,4 @@
 *.do text eol=crlf
 *.tif binary
 *.png binary
+resources/* -text
