@@ -2,7 +2,7 @@
   Step 6. Nationwide models: survey-weighted generalized estimating equations
   (weight _LLCPWT) with robust standard errors clustered by state
   (REPEATED SUBJECT=_STATE, independence working correlation).
-  Models 1, 2, 3 (3a) and 3b as defined in step 5. Nationwide row of S2 Table.
+  Models 1, 2, 3 (3a) and 3b as defined in step 5. Nationwide row of S3 Table.
 
   Outputs (output\models\):
     nationwide_gee.csv        URRU, year and interaction terms

@@ -6,13 +6,13 @@
     Steps (see README.md for what each produces):
       1  Python  download and verify the BRFSS 2018-2025 files (skipped if already present)
       2  Python  build the pooled analytic file
-      3  Python  descriptive tables (Table 1, S1 Table, sample flow, state-by-year counts)
+      3  Python  descriptive tables (Table 1, S2 Table, sample flow, state-by-year counts)
       4  SAS     import the analytic file
       5  SAS     state and nationwide survey logistic models (Models 1, 2, 3a, 3b)
       6  SAS     nationwide GEE models
       7  SAS     year-specification sensitivity analysis
       8  SAS     state quadratic-trend sensitivity analysis
-      9  Python  model tables (Table 2, S2 Table, S3 Table, results counts, captions)
+      9  Python  model tables (Table 2, S1 Table, S3 Table, results counts, captions)
       10 Python  Fig 1 (US state map of the urban-rural odds ratios)
       11 Python  S1 Fig (US state maps of rural and urban smoking prevalence)
       12 Stata   Fig 2 predicted probabilities

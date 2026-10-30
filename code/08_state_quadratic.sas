@@ -1,6 +1,6 @@
 /*==========================================================================
   Step 8. Sensitivity analysis: quadratic time trend within each of the 43 states
-  (S3 Table, Panel B). Two models per state, survey design as in step 5:
+  (S1 Table, panel 1b). Two models per state, survey design as in step 5:
     - Model 3b plus year squared and rural x year squared, with Wald tests of the
       quadratic terms (quad_joint: both terms; quad_gap: rural x year squared)
     - Model 3b plus year squared only, with a Wald test of year squared (quad_year)

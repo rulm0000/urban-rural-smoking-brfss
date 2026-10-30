@@ -11,13 +11,13 @@ Outputs (output/tables/):
                                       its BH-adjusted p-value, then the urban and rural annual
                                       ORs; rows = nationwide + states with an interaction
                                       BH-adjusted p-value < .05
-  S2_Table_urban_rural_ORs.csv        S2 Table: urban-rural OR and 95% CI, Models 1, 2 and 3a;
+  S3_Table_urban_rural_ORs.csv        S3 Table: urban-rural OR and 95% CI, Models 1, 2 and 3a;
                                       the "Model N BH-adjusted p-value < .05" Yes/No columns mark
                                       the states printed in bold
   interaction_all_states.csv          interaction OR, P and BH-adjusted p-value, all 43 states
-  S3_Table_A_year_specification.csv   S3 Table, panel 3a: year² and rural x year² in nationwide
+  S1_Table_A_year_specification.csv   S1 Table, panel 1a: year² and rural x year² in nationwide
                                       Model 3b + year² + rural x year²
-  S3_Table_B_state_quadratic.csv      S3 Table, panel 3b: states (of 43) whose quadratic year
+  S1_Table_B_state_quadratic.csv      S1 Table, panel 1b: states (of 43) whose quadratic year
                                       term has a BH-adjusted p-value < .05
   results_counts.txt                  the "X of 43 states" counts quoted in the Results
   table_captions.md                   titles, notes and captions of Tables 1-2, S1-S3 Tables,
@@ -34,7 +34,7 @@ Outputs (output/models/):
 Multiple testing: BH-adjusted p-values use the Benjamini-Hochberg (BH) false discovery rate
 procedure across the 43 state-specific tests, applied separately to each family of tests: the
 urban-rural odds ratio in Model 1, in Model 2 and in Model 3a, and the urban-rural x year
-interaction in Model 3b (in S3 Table panel 3b, each quadratic test is also its own family). A
+interaction in Model 3b (in S1 Table panel 1b, each quadratic test is also its own family). A
 state-specific result is significant when its BH-adjusted p-value is < .05. The nationwide
 model is a single test, is not in any family, and is judged by its unadjusted P. (Inside this
 script and in output/models, a BH-adjusted p-value is still called q, e.g. q_BH, QValue_Model3.)
@@ -66,9 +66,9 @@ def ci(lo, hi, d=2):
     return "(%.*f, %.*f)" % (d, lo, d, hi)
 
 
-def s2_table(pe):
+def s3_table(pe):
     """Urban-rural OR by state for Models 1, 2, 3a; nationwide row from the GEE models.
-    The "BH-adjusted p-value < .05" columns flag the cells printed in bold in S2 Table."""
+    The "BH-adjusted p-value < .05" columns flag the cells printed in bold in S3 Table."""
     urru = pe[pe.Variable == "URRU"]
     s1 = urru.pivot_table(index=["State_Code", "State"], columns="Model",
                           values=["OR", "LowerCL_OR", "UpperCL_OR", "ProbChiSq"], aggfunc="first")
@@ -87,7 +87,7 @@ def s2_table(pe):
     g["Model"] = g["Model"].astype(str).str.strip()
     g["P"] = num(g["ProbZ"]).values
     gu = g[g.Variable.str.upper() == "URRU"].set_index("Model")
-    # the S2 Table note states "All nationwide P < .001"
+    # the S3 Table note states "All nationwide p < .001"
     assert (gu.loc[["1", "2", "3"], "P"] < .001).all(), "a nationwide urban-rural P is >= .001"
 
     models = (("1", "Model 1"), ("2", "Model 2"), ("3", "Model 3a"))
@@ -109,7 +109,7 @@ def s2_table(pe):
         for m, lab in models:
             r[lab + bold] = "Yes" if x["q_M" + m] < .05 else "No"
         rows.append(r)
-    pd.DataFrame(rows).to_csv(os.path.join(TABLES_DIR, "S2_Table_urban_rural_ORs.csv"), index=False,
+    pd.DataFrame(rows).to_csv(os.path.join(TABLES_DIR, "S3_Table_urban_rural_ORs.csv"), index=False,
                               encoding="utf-8-sig")
     return s1, gu
 
@@ -202,9 +202,9 @@ def fig_inputs(s1, it, keep):
     open(os.path.join(MODELS_DIR, "fig2_entities.do"), "w").write("\n".join(lines) + "\n")
 
 
-def s3_tables():
-    """S3 Table. Panel 3a: year² and rural x year² from one nationwide survey logistic model,
-    Model 3b + year² + rural x year² (the QUADRATIC specification of step 7). Panel 3b: states
+def s1_tables():
+    """S1 Table. Panel 1a: year² and rural x year² from one nationwide survey logistic model,
+    Model 3b + year² + rural x year² (the QUADRATIC specification of step 7). Panel 1b: states
     whose quadratic term has a BH-adjusted p-value < .05 (step 8)."""
     # P values from the Wald chi-square itself: SAS rounds ProbChiSq to four decimals, which can
     # flip the third decimal (e.g. .7875 printed for P = .78753)
@@ -222,7 +222,7 @@ def s3_tables():
         x = quad_model.loc[var]
         return {"Term": term, "OR": "%.3f" % x.OR, "95% CI": ci(x.LCL, x.UCL, 3), "p-value": fmt_p(x.p)}
     a = [row("year_sq", "Year²"), row("rural_x_yearsq", "Rural × year²")]
-    pd.DataFrame(a).to_csv(os.path.join(TABLES_DIR, "S3_Table_A_year_specification.csv"),
+    pd.DataFrame(a).to_csv(os.path.join(TABLES_DIR, "S1_Table_A_year_specification.csv"),
                            index=False, encoding="utf-8-sig")
 
     q = pd.read_csv(os.path.join(MODELS_DIR, "state_quadratic.csv"))
@@ -230,7 +230,7 @@ def s3_tables():
     q["p"] = num(q["ProbChiSq"]).values
     q["State"] = q["State_Code"].map(NAMES)
     # quad_year: Model 3b + year² only. quad_gap, quad_joint: Model 3b + year² + rural x year².
-    # Each test is its own family of 43 state-specific tests. The joint test is not in S3 Table;
+    # Each test is its own family of 43 state-specific tests. The joint test is not in S1 Table;
     # it is kept for results_counts.txt.
     b, quad = [], {}
     for lab, test in (("quad_year", "Year² (Model 3b + year²)"),
@@ -242,7 +242,7 @@ def s3_tables():
         if test:
             b.append({"Term": test, "BH-adjusted p-value < .05": "%d/%d" % ((x.q < .05).sum(), len(x))})
         quad[lab] = x
-    pd.DataFrame(b).to_csv(os.path.join(TABLES_DIR, "S3_Table_B_state_quadratic.csv"),
+    pd.DataFrame(b).to_csv(os.path.join(TABLES_DIR, "S1_Table_B_state_quadratic.csv"),
                            index=False, encoding="utf-8-sig")
     return quad
 
@@ -317,23 +317,20 @@ CAPTIONS = [
     "## Table 1",
     "Table body: `Table1_sample_characteristics.csv`",
     "Table 1. Sample demographic characteristics (N = 3,054,432), BRFSS 2018-2025",
-    ("Note. We present only the complete-case analytic sample in this table. Sample sizes are "
-     "unweighted. Percentages (%) and smoking prevalences are weighted. The unweighted sample "
-     "sizes across the 43 states included in state-specific analyses ranged from 18,294 "
-     "(Nevada) to 176,783 (New York) respondents. Within states, the rural sample sizes ranged "
-     "from 546 (Nevada) to 45,875 (Maine) respondents, and urban sample sizes ranged from "
-     "17,748 (Nevada) to 161,879 (New York) respondents. “Smoking prevalence” is the "
-     "percentage of current cigarette smokers within the total sample for each subgroup. For "
-     "example, 6.4% of the total weighted sample lived in rural counties, and 18.6% of adults "
-     "in those counties were current smokers."),
+    ("Note. We present the complete-case analytic sample. Sample sizes are unweighted, and "
+     "smoking prevalence estimates are weighted. The unweighted sample sizes across the 43 "
+     "states ranged from 18,294 (Nevada) to 176,783 (New York) respondents. Within states, the "
+     "rural sample sizes ranged from 546 (Nevada) to 45,875 (Maine) respondents, and urban "
+     "sample sizes ranged from 17,748 (Nevada) to 161,879 (New York) respondents. Smoking "
+     "prevalence is the percentage of current cigarette smokers within the total sample for "
+     "each subgroup. For example, 18.6% of adults in rural counties were current smokers."),
     "## Fig 1",
     "Figure: `output/figures/Fig1.tif`",
     "Fig 1. Differences in urban-rural cigarette smoking in US states, 2018-2025.",
     ("Notes. OR = Odds Ratio. Odds of smoking were higher among rural residents in "
      "darker-colored states. States with non-significant rural to urban odds ratios or "
      "insufficient rural sample sizes (n < 50) for analysis are in light and dark grey, "
-     "respectively. State boundaries are from the US Census Bureau cartographic boundary files "
-     "(public domain)."),
+     "respectively."),
     "## Table 2",
     "Table body: `Table2_trends_and_interaction.csv`",
     "Table 2. Linear time trends in current smoking among urban and rural groups (Model 3b)",
@@ -349,19 +346,35 @@ CAPTIONS = [
      "significant interaction terms after false discovery rate adjustment, 2018-2025. Shaded "
      "bands are 95% CIs."),
     "## S1 Table",
-    ("Table body: `S1_Table_state_prevalence.csv` (in the Word table the Nationwide row is "
+    "In the supplement file:",
+    ("S1 Table. Sensitivity analyses: quadratic specification of survey year, nationwide (1a) "
+     "and within states (1b)"),
+    "1a. Quadratic year terms in nationwide Model 3b",
+    "Table body: `S1_Table_A_year_specification.csv`",
+    "1b. Quadratic year terms in state-specific Model 3b",
+    "Table body: `S1_Table_B_state_quadratic.csv`",
+    ("Note. BH = Benjamini-Hochberg. Panel 1b p-values are BH-adjusted to control the false "
+     "discovery rate across the 43 state-specific analyses. Only 5 of 43 states had "
+     "significant quadratic year terms after adjusting for the false discovery rate. No states "
+     "had significant urban-rural differences in the quadratic year term after adjusting for "
+     "false discovery rate."),
+    "In the manuscript's Supporting information list:",
+    ("S1 Table. Sensitivity analyses: quadratic specification of survey year, nationwide (1a) "
+     "and within states (1b)"),
+    "## S2 Table",
+    ("Table body: `S2_Table_state_prevalence.csv` (in the Word table the Nationwide row is "
      "bold)"),
     "In the supplement file:",
-    ("S1 Table. State-level smoking prevalence estimates in rural and urban counties, 2018 and "
+    ("S2 Table. State-level smoking prevalence estimates in rural and urban counties, 2018 and "
      "2025."),
     ("Note. Weighted prevalence of current cigarette smoking among the complete-case analytic "
      "sample; respondents with missing smoking status are excluded from both numerator and "
      "denominator. CI = confidence interval. A dash indicates that the estimate was suppressed "
-     "because the unweighted sample size was less than 50 or the relative standard error "
+     "because the unweighted sample size was less than 50, the relative standard error "
      "exceeded 30%, or that the state did not contribute data in that year. California, "
      "Mississippi, and Nevada are not included in the 2025 BRFSS data."),
     "In the manuscript's Supporting information list:",
-    ("S1 Table. State-level smoking prevalence estimates in rural and urban counties, 2018 and "
+    ("S2 Table. State-level smoking prevalence estimates in rural and urban counties, 2018 and "
      "2025. A dash indicates that the estimate was suppressed because the relative standard "
      "error was greater than 30% or the unweighted sample size was less than 50, or that the "
      "state did not contribute data in that year."),
@@ -373,38 +386,21 @@ CAPTIONS = [
      "rural (top panels) and urban (bottom panels) counties. Higher prevalence is indicated by "
      "red and lower prevalence by green. State estimates are excluded (grey) if the unweighted "
      "sample size was less than 50, the relative standard error was greater than 30%, or the "
-     "state was not included in the BRFSS data for that year. State boundaries are from the US "
-     "Census Bureau cartographic boundary files (public domain)."),
-    "## S2 Table",
-    ("Table body: `S2_Table_urban_rural_ORs.csv` (an OR and its 95% CI are bold when the "
+     "state was not included in the BRFSS data for that year."),
+    "## S3 Table",
+    ("Table body: `S3_Table_urban_rural_ORs.csv` (an OR and its 95% CI are bold when the "
      "matching \"Model N BH-adjusted p-value < .05\" column is Yes)"),
     "In the supplement file:",
-    ("S2 Table. Odds ratios for the urban-rural variable in the nationwide and state-specific "
+    ("S3 Table. Odds ratios for the urban-rural variable in the nationwide and state-specific "
      "logistic regression models, 2018-2025"),
     ("Note. For nationwide analyses, we used generalized estimating equations with state-level "
      "cluster-robust standard errors to account for clustering of observations within states. "
-     "All nationwide P < .001. Bold indicates that the state-specific odds ratio was "
+     "All nationwide p < .001. Bold indicates that the state-specific odds ratio was "
      "significant after Benjamini-Hochberg (BH) false discovery rate adjustment for "
      "state-specific tests (BH-adjusted p-value < .05)."),
     "In the manuscript's Supporting information list:",
-    ("S2 Table. Odds ratios for the urban-rural variable in the nationwide and state-specific "
+    ("S3 Table. Odds ratios for the urban-rural variable in the nationwide and state-specific "
      "logistic regression models."),
-    "## S3 Table",
-    "In the supplement file:",
-    ("S3 Table. Sensitivity analyses: quadratic specification of survey year, nationwide (3a) "
-     "and within states (3b)"),
-    "3a. Quadratic year terms in nationwide Model 3b",
-    "Table body: `S3_Table_A_year_specification.csv`",
-    "3b. Quadratic year terms in state-specific Model 3b",
-    "Table body: `S3_Table_B_state_quadratic.csv`",
-    ("Note. BH = Benjamini-Hochberg. Panel 3b p-values are BH-adjusted to control the false "
-     "discovery rate across the 43 state-specific analyses. Only 5 of 43 states had "
-     "significant quadratic year terms after adjusting for the false discovery rate. No states "
-     "had significant urban-rural differences in the quadratic year term after adjusting for "
-     "false discovery rate."),
-    "In the manuscript's Supporting information list:",
-    ("S3 Table. Sensitivity analyses: quadratic specification of survey year, nationwide and "
-     "within states."),
 ]
 
 
@@ -426,14 +422,14 @@ def captions(it, sl, quad):
     n_int = int((it.State_Code != 0).sum())
     nq_year = int((quad["quad_year"].q < .05).sum())
     nq_gap = int((quad["quad_gap"].q < .05).sum())
-    assert nq_gap == 0, "S3 Table note says no state has a significant rural x year² term"
+    assert nq_gap == 0, "S1 Table note says no state has a significant rural x year² term"
     expect = [
         "(N = %s)" % hdr["analytic sample (complete)"].split()[0],
-        "state-specific analyses ranged from %s respondents" % hdr["state n range"],
+        "across the %d states ranged from %s respondents" % (n_int, hdr["state n range"]),
         "rural sample sizes ranged from %s respondents" % hdr["rural n range"],
         "urban sample sizes ranged from %s respondents" % hdr["urban n range"],
-        "%.1f%% of the total weighted sample lived in rural counties, and %.1f%% of adults"
-        % (rural.Percentage, rural["Smoking prevalence"]),
+        "For example, %.1f%% of adults in rural counties were current smokers"
+        % rural["Smoking prevalence"],
         "decreased by %.0f%% each year (OR = %.2f, 95%% CI: %.2f, %.2f)"
         % (100 * (1 - wa.Urban_OR), wa.Urban_OR, wa.Urban_LCL, wa.Urban_UCL),
         "did not decrease significantly (OR = %.2f, 95%% CI: %.2f, %.2f)"
@@ -451,12 +447,12 @@ def captions(it, sl, quad):
 def main():
     ensure_dirs()
     pe = read_params()
-    s1, gu = s2_table(pe)
+    s1, gu = s3_table(pe)
     it = interaction_table(pe)
     sl = simple_slopes(pe, it)
     keep = table2(it, sl)
     fig_inputs(s1, it, keep)
-    quad = s3_tables()
+    quad = s1_tables()
     counts(s1, gu, it, sl, quad)
     captions(it, sl, quad)
     print("wrote tables to", TABLES_DIR)

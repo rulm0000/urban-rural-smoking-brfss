@@ -6,7 +6,7 @@ Outputs (output/tables/):
                                             complete-case analytic sample
   Table1_sample_characteristics_values.csv  the same numbers unrounded, with weighted counts
   Table1_header_numbers.txt                 sample sizes and state ranges quoted in the text
-  S1_Table_state_prevalence.csv             S1 Table: rural and urban smoking prevalence by
+  S2_Table_state_prevalence.csv             S2 Table: rural and urban smoking prevalence by
                                             state, 2018 and 2025, with 95% CIs and rural:urban
                                             ratios
   sample_flow.csv                           exclusion steps from all respondents to the
@@ -16,7 +16,7 @@ Outputs (output/tables/):
 
 Prevalence estimates exclude respondents with missing smoking status from numerator and
 denominator. Weighted percentages in Table 1 use _LLCPWT / 8, so they describe an average
-annual population. S1 Table CIs use the Kish effective sample size; estimates are suppressed
+annual population. S2 Table CIs use the Kish effective sample size; estimates are suppressed
 when the unweighted n < 50 or the relative standard error > 30%.
 """
 import os
@@ -130,7 +130,7 @@ def sample_flow(df):
     print(t.to_string(index=False))
 
 
-# --------------------------------------------------------------------------- S1 Table
+# --------------------------------------------------------------------------- S2 Table
 def prev_ci(g):
     w, y, n = g["_LLCPWT"], g["currentsmoker"], len(g)
     if n == 0 or w.sum() == 0:
@@ -144,7 +144,7 @@ def prev_ci(g):
                           suppressed=(n < 50) or (rse > 30)))
 
 
-def s1_and_state_by_year(cc):
+def s2_and_state_by_year(cc):
     df = cc.copy()
     df["year"] = (df["year_centered"] + 2020).astype(int)
     df = df[~df["_STATE"].isin(ZERO_RURAL)]
@@ -188,14 +188,14 @@ def s1_and_state_by_year(cc):
     nat["Change in ratio"] = f"{nat['_ratio_2025'] - nat['_ratio_2018']:+.2f}"
     rows.insert(0, nat)
 
-    # column headers as in the S1 Table Word file
+    # column headers as in the S2 Table Word file
     show = {"State": "State",
             "Rural 2018": "Rural 2018 % (95% CI)", "Urban 2018": "Urban 2018 % (95% CI)",
             "Ratio 2018": "Rural:urban ratio 2018",
             "Rural 2025": "Rural 2025 % (95% CI)", "Urban 2025": "Urban 2025 % (95% CI)",
             "Ratio 2025": "Rural:urban ratio 2025", "Change in ratio": "Change in ratio"}
     t = pd.DataFrame(rows)[list(show)].rename(columns=show)
-    t.to_csv(os.path.join(TABLES_DIR, "S1_Table_state_prevalence.csv"), index=False,
+    t.to_csv(os.path.join(TABLES_DIR, "S2_Table_state_prevalence.csv"), index=False,
              encoding="utf-8-sig")
     print(t.head(5).to_string(index=False))
 
@@ -206,7 +206,7 @@ def main():
     cc = analytic_sample(df)
     table1(cc, len(df))
     sample_flow(df)
-    s1_and_state_by_year(cc)
+    s2_and_state_by_year(cc)
     print("wrote tables to", TABLES_DIR)
 
 

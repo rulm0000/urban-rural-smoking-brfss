@@ -41,13 +41,13 @@ A full run takes about 20 minutes on a laptop, mostly the SAS models.
 |---|---|---|
 | 1 | `code/01_download_brfss.py` | BRFSS 2018-2025 files, verified by checksum |
 | 2 | `code/02_build_analytic_file.py` | `data/derived/brfss_2018_2025_analytic.csv` (or unpacks it from the archived copy) |
-| 3 | `code/03_descriptives.py` | Table 1, S1 Table, sample flow and state-by-year counts (`sample_flow.csv`, `state_by_year.csv`) |
+| 3 | `code/03_descriptives.py` | Table 1, S2 Table, sample flow and state-by-year counts (`sample_flow.csv`, `state_by_year.csv`) |
 | 4 | `code/04_import_analytic_file.sas` | SAS copy of the analytic file |
 | 5 | `code/05_state_models.sas` | Survey logistic models, nationwide and 43 states (Models 1, 2, 3a, 3b) |
 | 6 | `code/06_nationwide_gee.sas` | Nationwide survey-weighted GEE models, clustered by state |
-| 7 | `code/07_year_specification.sas` | Linear, quadratic and categorical survey year, nationwide (S3 Table, panel 3a uses the quadratic model) |
-| 8 | `code/08_state_quadratic.sas` | Quadratic trend within each state (S3 Table, panel 3b) |
-| 9 | `code/09_model_tables.py` | Table 2, S2 Table, S3 Table, the counts quoted in the Results (`results_counts.txt`), the table and figure captions (`table_captions.md`), the Fig 1 input (`state_or_summary.csv`) and the list of Fig 2 panels (`fig2_entities.do`) |
+| 7 | `code/07_year_specification.sas` | Linear, quadratic and categorical survey year, nationwide (S1 Table, panel 1a uses the quadratic model) |
+| 8 | `code/08_state_quadratic.sas` | Quadratic trend within each state (S1 Table, panel 1b) |
+| 9 | `code/09_model_tables.py` | Table 2, S1 Table, S3 Table, the counts quoted in the Results (`results_counts.txt`), the table and figure captions (`table_captions.md`), the Fig 1 input (`state_or_summary.csv`) and the list of Fig 2 panels (`fig2_entities.do`) |
 | 10 | `code/10_fig1_map.py` | Fig 1: US state map of the urban-rural odds ratios (Models 1, 2 and 3a), with Alaska and Hawaii as insets |
 | 11 | `code/11_s1_fig_map.py` | S1 Fig: US state maps of smoking prevalence, rural and urban, 2018 and 2025 |
 | 12 | `code/12_fig2_predictions.do` | Survey-weighted predicted probabilities and 95% CIs for Fig 2, plus unadjusted prevalence for reference (`fig2_plotted_values.csv`) |
@@ -85,7 +85,7 @@ The outputs from the published run are in `output/` so results can be checked wi
 
 ## Archived copy
 
-Version 1.2.0 of this repository, including the analytic data file, is archived at UNC Dataverse: https://doi.org/10.15139/S3/E6VVVL. Since that version, the only changes are in presentation: Fig 1 and S1 Fig are geographic state maps drawn on the US Census Bureau boundary file; Fig 2 is simpler (two columns, drawn in Python from the Stata estimates, showing only the predicted probabilities and their 95% CIs); Table 2 and S3 Table have a new layout; and the tables and captions call the false discovery rate-adjusted value the BH-adjusted p-value. Every estimate is the same. Version 1.0.0 is also archived on Zenodo: https://doi.org/10.5281/zenodo.23018447
+Version 1.2.0 of this repository, including the analytic data file, is archived at UNC Dataverse: https://doi.org/10.15139/S3/E6VVVL. Since that version, the only changes are in presentation: the supplementary tables are renumbered in order of first citation in the paper (the old S3 Table is now S1 Table, the old S1 Table is now S2 Table, and the old S2 Table is now S3 Table, with their CSV files renamed to match); Fig 1 and S1 Fig are geographic state maps drawn on the US Census Bureau boundary file; Fig 2 is simpler (two columns, drawn in Python from the Stata estimates, showing only the predicted probabilities and their 95% CIs); Table 2 and S1 Table (the quadratic year sensitivity analysis) have a new layout; and the tables and captions call the false discovery rate-adjusted value the BH-adjusted p-value. Every estimate is the same. Version 1.0.0 is also archived on Zenodo: https://doi.org/10.5281/zenodo.23018447
 
 ## Data
 
