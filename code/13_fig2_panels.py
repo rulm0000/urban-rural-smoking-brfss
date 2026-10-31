@@ -2,12 +2,14 @@
 2018-2025 (Model 3b), nationwide and for each state whose urban-rural x year interaction
 is significant after false discovery rate adjustment.
 
-Draws the predicted probabilities that step 12 (Stata) estimated: one line per group with
-its 95% CI as a shaded band. Panels follow the Table 2 order in two columns, with the
-legend in the next free cell. No text other than the panel names, axes and legend is drawn
-in the figure.
+Draws the predicted probabilities that step 12 (Stata) wrote: one line per group with its
+95% CI as a shaded band. The nationwide panel comes from the survey-weighted GEE model
+clustered by state (step 6), the state panels from the svy models of step 12. Panels follow
+the Table 2 order in two columns, with the legend in the next free cell. No text other than
+the panel names, axes and legend is drawn in the figure.
 
-Inputs : output/models/fig2_plotted_values.csv  (step 12; the prev column is not drawn)
+Inputs : output/models/fig2_plotted_values.csv  (step 12, with the nationwide rows from step 6;
+                                                the prev column is not drawn)
          output/models/fig2_entities.do         (step 9: panel names and order)
 Output : output/figures/Fig2.tif (300 dpi, LZW, 7.5 in wide) and Fig2.png
 """

@@ -1,5 +1,7 @@
 /*==========================================================================
   Step 5. Survey logistic regression models, nationwide and for each of the 43 states.
+  The paper reports the state models. The nationwide fit (State_Code 0) is not reported:
+  every nationwide result comes from the GEE models of step 6.
 
   Design: BRFSS final weight (_LLCPWT), stratum (_STSTR) and primary sampling unit (_PSU),
   Taylor-series linearization (PROC SURVEYLOGISTIC).

@@ -1,10 +1,23 @@
-"""Step 9. Turn the SAS model output into the manuscript and supplement tables.
+"""Step 9. Turn the SAS and Stata model output into the manuscript and supplement tables.
 
 Inputs (output/models/, from steps 5-8):
-  state_params.csv, simple_slopes.csv, nationwide_gee.csv, year_spec.csv, year_test.csv,
-  state_quadratic.csv
+  state_params.csv, simple_slopes.csv   state survey logistic models (step 5)
+  nationwide_gee.csv                    nationwide GEE Models 1, 2, 3a and 3b (step 6, SAS)
+  nationwide_gee_slopes.csv             nationwide GEE Model 3b: urban and rural annual change
+                                        and the interaction (step 6, Stata)
+  nationwide_gee_quadratic.csv          nationwide GEE Model 3b + year² + rural x year² (step 6,
+                                        Stata)
+  year_spec.csv                         nationwide survey logistic year specifications (step 7),
+                                        only to check the GEE quadratic point estimates
+  state_quadratic.csv                   state quadratic-trend models (step 8)
   and, to check the numbers quoted in table_captions.md, the step 3 tables
   Table1_header_numbers.txt, Table1_sample_characteristics_values.csv and state_by_year.csv
+
+Every nationwide estimate comes from the survey-weighted GEE models clustered by state (step 6):
+the nationwide rows of S3 Table, Table 2, interaction_all_states.csv and state_or_summary.csv,
+S1 Table panel 1a and the nationwide lines of results_counts.txt. The nationwide survey logistic
+fits of steps 5 and 7 have the same point estimates (the same weighted likelihood) and are not
+reported; the step 7 quadratic fit is used as a check.
 
 Outputs (output/tables/):
   Table2_trends_and_interaction.csv   Table 2: the urban-rural x year interaction (Model 3b) with
@@ -14,7 +27,8 @@ Outputs (output/tables/):
   S3_Table_urban_rural_ORs.csv        S3 Table: urban-rural OR and 95% CI, Models 1, 2 and 3a;
                                       the "Model N BH-adjusted p-value < .05" Yes/No columns mark
                                       the states printed in bold
-  interaction_all_states.csv          interaction OR, P and BH-adjusted p-value, all 43 states
+  interaction_all_states.csv          interaction OR, P and BH-adjusted p-value, nationwide and
+                                      all 43 states
   S1_Table_A_year_specification.csv   S1 Table, panel 1a: year² and rural x year² in nationwide
                                       Model 3b + year² + rural x year²
   S1_Table_B_state_quadratic.csv      S1 Table, panel 1b: states (of 43) whose quadratic year
@@ -43,13 +57,50 @@ import os
 
 import numpy as np
 import pandas as pd
-from scipy.stats import chi2, norm
+from scipy.stats import norm
 from statsmodels.stats.multitest import multipletests
 
 from common import FIPS, MODELS_DIR, TABLES_DIR, ensure_dirs, fmt_p, num
 
 NAMES = dict(FIPS)
 NAMES[0] = "Nationwide"
+
+
+def gee_nationwide():
+    """Nationwide GEE results of step 6 written by Stata (06b_nationwide_gee.do): the Model 3b
+    annual changes and interaction, and the quadratic-year model. Checks: the Model 3b terms
+    equal SAS GENMOD's (06_nationwide_gee.sas; estimates to full precision through the OR,
+    standard errors to the 4 decimals SAS writes, which also confirms that Stata's cluster
+    variance was rescaled to GENMOD's empirical variance), and the quadratic model has the
+    point estimates of the step 7 QUADRATIC survey logistic model."""
+    out = []
+    for f in ("nationwide_gee_slopes.csv", "nationwide_gee_quadratic.csv"):
+        d = pd.read_csv(os.path.join(MODELS_DIR, f))
+        d["term"] = d["term"].astype(str).str.strip()
+        out.append(d.set_index("term"))
+    gs, gq = out
+
+    g = pd.read_csv(os.path.join(MODELS_DIR, "nationwide_gee.csv"))
+    g["Variable"] = g["Variable"].astype(str).str.strip()
+    g = g[g["Model"].astype(str).str.strip() == "3b"].set_index("Variable")
+    for term, var in (("urru", "URRU"), ("urban_year", "year_centered"),
+                      ("urru_x_year", "year_centered*URRU")):
+        x, s = gs.loc[term], g.loc[var]
+        assert abs(x["or"] / float(s.OR) - 1) < 1e-5, "%s: Stata GEE estimate differs from GENMOD" % term
+        assert abs(x.se - float(s.Stderr)) <= 5e-5 + 1e-7, \
+            "%s: Stata GEE SE %.6f differs from GENMOD %s" % (term, x.se, s.Stderr)
+    assert abs(gs.loc["rural_year", "estimate"]
+               - gs.loc["urban_year", "estimate"] - gs.loc["urru_x_year", "estimate"]) < 1e-9
+
+    ys = pd.read_csv(os.path.join(MODELS_DIR, "year_spec.csv"))
+    ys["Variable"] = ys["Variable"].astype(str).str.strip()
+    ys = ys[ys.Spec.str.strip() == "QUADRATIC"].set_index("Variable")
+    for term, var in (("year_sq", "year_sq"), ("rural_x_yearsq", "rural_x_yearsq"),
+                      ("year_centered", "year_centered"), ("rural_x_year", "rural_x_year"),
+                      ("urru", "URRU")):
+        assert abs(gq.loc[term, "or"] / ys.loc[var, "OR"] - 1) < 1e-5, \
+            "%s: GEE quadratic estimate differs from the step 7 QUADRATIC model" % term
+    return gs, gq
 
 
 def read_params():
@@ -114,12 +165,16 @@ def s3_table(pe):
     return s1, gu
 
 
-def interaction_table(pe):
+def interaction_table(pe, gs):
+    """Urban-rural x year interaction (Model 3b): states from the survey logistic models of
+    step 5, nationwide from the GEE model of step 6."""
     ib = pe[(pe.Variable == "year_centered*URRU") & (pe.Model == "3b")].copy()
     st = ib[ib.State_Code != 0].copy()
     st["q_BH"] = multipletests(st.ProbChiSq.values, alpha=0.05, method="fdr_bh")[1]
-    nat = ib[ib.State_Code == 0].copy()
-    nat["q_BH"] = np.nan
+    x = gs.loc["urru_x_year"]
+    nat = pd.DataFrame([{"State_Code": 0, "State": NAMES[0], "Model": "3b", "Variable": "year_centered*URRU",
+                         "Estimate": x.estimate, "StdErr": x.se, "OR": x["or"], "LowerCL_OR": x.lcl,
+                         "UpperCL_OR": x.ucl, "ProbChiSq": x.p, "q_BH": np.nan}])
     it = pd.concat([nat, st]).sort_values("State_Code")
     it["sig_raw"] = it.ProbChiSq < .05
     it["sig_BH"] = it.q_BH < .05
@@ -129,19 +184,20 @@ def interaction_table(pe):
     return it
 
 
-def simple_slopes(pe, it):
+def simple_slopes(pe, it, gs):
     """Urban slope = year_centered coefficient of Model 3b (urban is the reference level).
     Rural slope = ESTIMATE 'URRU=1' (year + interaction), checked against the coefficients.
     The ESTIMATE 'URRU=0' row of simple_slopes.csv is not used: with PARAM=GLM, SAS fills in
     the year_centered*URRU coefficients as 1/2 each, so that row is the average of the urban
-    and rural slopes, not the urban slope."""
-    yc = pe[(pe.Variable == "year_centered") & (pe.Model == "3b")].set_index("State_Code")
+    and rural slopes, not the urban slope.
+    Nationwide row: the urban and rural slopes of the GEE Model 3b (step 6, Stata lincom)."""
+    yc = pe[(pe.Variable == "year_centered") & (pe.Model == "3b") & (pe.State_Code != 0)].set_index("State_Code")
     ib = it.set_index("State_Code")
     sl = pd.read_csv(os.path.join(MODELS_DIR, "simple_slopes.csv"))
     for c in ("Estimate", "StdErr"):
         sl[c] = num(sl[c]).values
-    rur = sl[sl.Label.astype(str).str.contains("URRU=1")].set_index("State_Code")
-    diff = (rur.Estimate - (yc.Estimate + ib.Estimate)).abs().max()
+    rur = sl[sl.Label.astype(str).str.contains("URRU=1") & (sl.State_Code != 0)].set_index("State_Code")
+    diff = (rur.Estimate - (yc.Estimate + ib.Estimate)).dropna().abs().max()
     assert diff < 2e-3, "rural slope does not equal year + interaction (max diff %g)" % diff
 
     t = pd.DataFrame({"State_Code": yc.index})
@@ -151,6 +207,11 @@ def simple_slopes(pe, it):
         t[g + "_LCL"] = np.exp(e - 1.96 * s).values
         t[g + "_UCL"] = np.exp(e + 1.96 * s).values
         t[g + "_P"] = 2 * (1 - norm.cdf(np.abs((e / s).values)))
+    nat = {"State_Code": 0}
+    for g, term in (("Urban", "urban_year"), ("Rural", "rural_year")):
+        x = gs.loc[term]
+        nat.update({g + "_OR": x["or"], g + "_LCL": x.lcl, g + "_UCL": x.ucl, g + "_P": x.p})
+    t = pd.concat([pd.DataFrame([nat]), t], ignore_index=True)
     return t.set_index("State_Code")
 
 
@@ -174,13 +235,17 @@ def table2(it, sl):
     return keep
 
 
-def fig_inputs(s1, it, keep):
+def fig_inputs(s1, gu, it, keep):
     ib = it.set_index("State_Code")
     chor = pd.DataFrame({"State_Code": s1.State_Code.values, "State": s1.State.values})
+    nat = chor.State_Code == 0
     for m in ("1", "2", "3"):
         chor["OR_Model" + m] = s1["OR_M" + m].values
         chor["PValue_Model" + m] = s1["ProbChiSq_M" + m].values
         chor["QValue_Model" + m] = s1["q_M" + m].values
+        # nationwide row (not drawn in Fig 1): the GEE model of step 6, as in S3 Table
+        chor.loc[nat, "OR_Model" + m] = gu.loc[m, "OR"]
+        chor.loc[nat, "PValue_Model" + m] = gu.loc[m, "P"]
     chor["OR_Model3b_interaction"] = chor.State_Code.map(ib.OR)
     chor["PValue_Model3b_interaction"] = chor.State_Code.map(ib.ProbChiSq)
     chor.to_csv(os.path.join(MODELS_DIR, "state_or_summary.csv"), index=False)
@@ -202,25 +267,13 @@ def fig_inputs(s1, it, keep):
     open(os.path.join(MODELS_DIR, "fig2_entities.do"), "w").write("\n".join(lines) + "\n")
 
 
-def s1_tables():
-    """S1 Table. Panel 1a: year² and rural x year² from one nationwide survey logistic model,
-    Model 3b + year² + rural x year² (the QUADRATIC specification of step 7). Panel 1b: states
-    whose quadratic term has a BH-adjusted p-value < .05 (step 8)."""
-    # P values from the Wald chi-square itself: SAS rounds ProbChiSq to four decimals, which can
-    # flip the third decimal (e.g. .7875 printed for P = .78753)
-    ys = pd.read_csv(os.path.join(MODELS_DIR, "year_spec.csv"))
-    ys["Variable"] = ys["Variable"].astype(str).str.strip()
-    ys["p"] = chi2.sf(num(ys["WaldChiSq"]).values, 1)
-    quad_model = ys[ys.Spec.str.strip() == "QUADRATIC"].set_index("Variable")
-    # the rural x year² test of step 7 (year_test.csv) must come from this same model
-    tst = pd.read_csv(os.path.join(MODELS_DIR, "year_test.csv"))
-    gap = num(tst.loc[tst.Label.str.strip() == "quad_gap", "WaldChiSq"]).iloc[0]
-    assert abs(gap - quad_model.loc["rural_x_yearsq", "WaldChiSq"]) < 1e-6, \
-        "year_test.csv quad_gap is not from the QUADRATIC model in year_spec.csv"
-
+def s1_tables(gq):
+    """S1 Table. Panel 1a: year² and rural x year² from one nationwide GEE model,
+    Model 3b + year² + rural x year² (step 6, Stata; the QUADRATIC specification of step 7).
+    Panel 1b: states whose quadratic term has a BH-adjusted p-value < .05 (step 8)."""
     def row(var, term):
-        x = quad_model.loc[var]
-        return {"Term": term, "OR": "%.3f" % x.OR, "95% CI": ci(x.LCL, x.UCL, 3), "p-value": fmt_p(x.p)}
+        x = gq.loc[var]
+        return {"Term": term, "OR": "%.3f" % x["or"], "95% CI": ci(x.lcl, x.ucl, 3), "p-value": fmt_p(x.p)}
     a = [row("year_sq", "Year²"), row("rural_x_yearsq", "Rural × year²")]
     pd.DataFrame(a).to_csv(os.path.join(TABLES_DIR, "S1_Table_A_year_specification.csv"),
                            index=False, encoding="utf-8-sig")
@@ -288,10 +341,10 @@ def counts(s1, gu, it, sl, quad):
     L.append("Significant interactions with OR < 1 (narrowing gap): %s"
              % (", ".join(sr.loc[sr.OR < 1, "State"]) or "none"))
     nr = it[it.State_Code == 0].iloc[0]
-    L.append("Nationwide interaction: OR %.3f (%.3f, %.3f), P %s"
+    L.append("Nationwide interaction (GEE): OR %.3f (%.3f, %.3f), P %s"
              % (nr.OR, nr.LowerCL_OR, nr.UpperCL_OR, fmt_p(nr.ProbChiSq)))
     ns = sl.loc[0]
-    L.append("Nationwide annual OR: urban %.2f %s, rural %.2f %s"
+    L.append("Nationwide annual OR (GEE): urban %.2f %s, rural %.2f %s"
              % (ns.Urban_OR, ci(ns.Urban_LCL, ns.Urban_UCL), ns.Rural_OR, ci(ns.Rural_LCL, ns.Rural_UCL)))
     for lab, test in (("quad_year", "year² alone (Model 3b + year²)"),
                       ("quad_gap", "rural × year² (Model 3b + year² + rural × year²)"),
@@ -353,8 +406,9 @@ CAPTIONS = [
     "Table body: `S1_Table_A_year_specification.csv`",
     "1b. Quadratic year terms in state-specific Model 3b",
     "Table body: `S1_Table_B_state_quadratic.csv`",
-    ("Note. BH = Benjamini-Hochberg. Panel 1b p-values are BH-adjusted to control the false "
-     "discovery rate across the 43 state-specific analyses. Only 5 of 43 states had "
+    ("Note. Panel 1a estimates are from survey-weighted generalized estimating equations with "
+     "standard errors clustered by state. BH = Benjamini-Hochberg. Panel 1b p-values are "
+     "BH-adjusted to control the false discovery rate across the 43 state-specific analyses. Only 5 of 43 states had "
      "significant quadratic year terms after adjusting for the false discovery rate. No states "
      "had significant urban-rural differences in the quadratic year term after adjusting for "
      "false discovery rate."),
@@ -404,9 +458,10 @@ CAPTIONS = [
 ]
 
 
-def captions(it, sl, quad):
+def captions(it, sl, quad, gq):
     """Write table_captions.md after checking every number it quotes against the analysis
-    output (the Table 1 numbers against the step 3 tables)."""
+    output (the Table 1 numbers against the step 3 tables) and that the S1 Table note names
+    the model panel 1a comes from."""
     text = "\n\n".join(CAPTIONS)
     hdr = {}
     for line in open(os.path.join(TABLES_DIR, "Table1_header_numbers.txt"), encoding="utf-8"):
@@ -423,6 +478,11 @@ def captions(it, sl, quad):
     nq_year = int((quad["quad_year"].q < .05).sum())
     nq_gap = int((quad["quad_gap"].q < .05).sum())
     assert nq_gap == 0, "S1 Table note says no state has a significant rural x year² term"
+    # panel 1a (gq) is the nationwide GEE model: clustered by state (the 50 states and DC), with
+    # the variance rescaled by (G-1)/G to GENMOD's empirical variance (06b_nationwide_gee.do)
+    G = gq.n_clust
+    assert ((G == len(FIPS)) & ((gq.vfactor - (G - 1) / G).abs() < 1e-12)).all(), \
+        "S1 Table panel 1a is not from the nationwide GEE model clustered by state"
     expect = [
         "(N = %s)" % hdr["analytic sample (complete)"].split()[0],
         "across the %d states ranged from %s respondents" % (n_int, hdr["state n range"]),
@@ -437,6 +497,8 @@ def captions(it, sl, quad):
         "across the %d state-specific interaction tests" % n_int,
         "across the %d state-specific analyses" % len(quad["quad_year"]),
         "Only %d of %d states had significant quadratic year terms" % (nq_year, len(quad["quad_year"])),
+        "Note. Panel 1a estimates are from survey-weighted generalized estimating equations with "
+        "standard errors clustered by state.",
         "%s, and %s are not included in the 2025 BRFSS data" % (", ".join(no2025[:-1]), no2025[-1]),
     ]
     missing = [e for e in expect if e not in text]
@@ -447,14 +509,15 @@ def captions(it, sl, quad):
 def main():
     ensure_dirs()
     pe = read_params()
+    gs, gq = gee_nationwide()
     s1, gu = s3_table(pe)
-    it = interaction_table(pe)
-    sl = simple_slopes(pe, it)
+    it = interaction_table(pe, gs)
+    sl = simple_slopes(pe, it, gs)
     keep = table2(it, sl)
-    fig_inputs(s1, it, keep)
-    quad = s1_tables()
+    fig_inputs(s1, gu, it, keep)
+    quad = s1_tables(gq)
     counts(s1, gu, it, sl, quad)
-    captions(it, sl, quad)
+    captions(it, sl, quad, gq)
     print("wrote tables to", TABLES_DIR)
 
 

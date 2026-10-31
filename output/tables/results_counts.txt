@@ -13,8 +13,8 @@ Interaction P < .05: 10/43: Arkansas, Kansas, Kentucky, Maine, Missouri, Montana
 Interaction BH-adjusted p-value < .05: 6/43: Arkansas, Kansas, Montana, Nebraska, Washington, West Virginia
 Interaction after FDR adjustment, out of 43: significant (BH-adjusted p-value < .05; Table 2 rows and Fig 2 panels) 6/43 (14.0%); not significant (BH-adjusted p-value >= .05) 37/43 (86.0%)
 Significant interactions with OR < 1 (narrowing gap): none
-Nationwide interaction: OR 1.020 (1.011, 1.030), P <.001
-Nationwide annual OR: urban 0.94 (0.93, 0.94), rural 0.96 (0.95, 0.97)
+Nationwide interaction (GEE): OR 1.020 (1.011, 1.030), P <.001
+Nationwide annual OR (GEE): urban 0.94 (0.93, 0.94), rural 0.96 (0.95, 0.96)
 State quadratic, year² alone (Model 3b + year²): P < .05 9/43 [Arizona, Georgia, Idaho, Michigan, Minnesota, Mississippi, New Mexico, Tennessee, Vermont]; BH-adjusted p-value < .05 5/43 [Arizona, Michigan, Minnesota, Mississippi, Vermont]
 State quadratic, rural × year² (Model 3b + year² + rural × year²): P < .05 4/43 [Arizona, Idaho, Indiana, Utah]; BH-adjusted p-value < .05 0/43 [none]
 State quadratic, joint test of year² and rural × year² (same model): P < .05 9/43 [Arizona, Georgia, Idaho, Michigan, Minnesota, Mississippi, New Mexico, Utah, Vermont]; BH-adjusted p-value < .05 4/43 [Arizona, Michigan, Minnesota, Vermont]

@@ -1,6 +1,8 @@
 /*==========================================================================
-  Step 7. Sensitivity analysis: specification of survey year, nationwide Model 3b
-  (S1 Table, panel 1a). Survey design as in step 5.
+  Step 7. Sensitivity analysis: specification of survey year, nationwide Model 3b.
+  Survey design as in step 5. Not reported: S1 Table, panel 1a uses the GEE version of the
+  QUADRATIC model (06b_nationwide_gee.do, step 6), and step 9 checks that its point
+  estimates equal the QUADRATIC estimates written here.
 
     LINEAR       survey year as a linear term (primary analysis)
     QUADRATIC    adds year squared and rural x year squared; joint Wald test of both

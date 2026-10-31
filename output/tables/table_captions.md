@@ -46,7 +46,7 @@ Table body: `S1_Table_A_year_specification.csv`
 
 Table body: `S1_Table_B_state_quadratic.csv`
 
-Note. BH = Benjamini-Hochberg. Panel 1b p-values are BH-adjusted to control the false discovery rate across the 43 state-specific analyses. Only 5 of 43 states had significant quadratic year terms after adjusting for the false discovery rate. No states had significant urban-rural differences in the quadratic year term after adjusting for false discovery rate.
+Note. Panel 1a estimates are from survey-weighted generalized estimating equations with standard errors clustered by state. BH = Benjamini-Hochberg. Panel 1b p-values are BH-adjusted to control the false discovery rate across the 43 state-specific analyses. Only 5 of 43 states had significant quadratic year terms after adjusting for the false discovery rate. No states had significant urban-rural differences in the quadratic year term after adjusting for false discovery rate.
 
 In the manuscript's Supporting information list:
 

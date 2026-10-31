@@ -9,13 +9,14 @@
       3  Python  descriptive tables (Table 1, S2 Table, sample flow, state-by-year counts)
       4  SAS     import the analytic file
       5  SAS     state and nationwide survey logistic models (Models 1, 2, 3a, 3b)
-      6  SAS     nationwide GEE models
+      6  SAS     nationwide GEE models (Models 1, 2, 3a, 3b)
+         Stata   nationwide GEE Model 3b slopes, quadratic-year model and Fig 2 nationwide panel
       7  SAS     year-specification sensitivity analysis
       8  SAS     state quadratic-trend sensitivity analysis
       9  Python  model tables (Table 2, S1 Table, S3 Table, results counts, captions)
       10 Python  Fig 1 (US state map of the urban-rural odds ratios)
       11 Python  S1 Fig (US state maps of rural and urban smoking prevalence)
-      12 Stata   Fig 2 predicted probabilities
+      12 Stata   Fig 2 predicted probabilities (state panels; nationwide panel from step 6)
       13 Python  Fig 2 (predicted probabilities with 95% CIs)
 
 .PARAMETER RawDir
@@ -111,7 +112,7 @@ $steps = @(
     @(3,  "Descriptive tables",                  { Run-Python "03_descriptives.py" }),
     @(4,  "SAS: import analytic file",           { Run-Sas "04_import_analytic_file.sas" }),
     @(5,  "SAS: state and nationwide models",    { Run-Sas "05_state_models.sas" }),
-    @(6,  "SAS: nationwide GEE models",          { Run-Sas "06_nationwide_gee.sas" }),
+    @(6,  "SAS, Stata: nationwide GEE models",   { Run-Sas "06_nationwide_gee.sas"; Run-Stata "06b_nationwide_gee.do" }),
     @(7,  "SAS: year-specification sensitivity", { Run-Sas "07_year_specification.sas" }),
     @(8,  "SAS: state quadratic sensitivity",    { Run-Sas "08_state_quadratic.sas" }),
     @(9,  "Model tables",                        { Run-Python "09_model_tables.py" }),

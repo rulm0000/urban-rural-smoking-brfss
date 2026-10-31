@@ -3,6 +3,11 @@
   (weight _LLCPWT) with robust standard errors clustered by state
   (REPEATED SUBJECT=_STATE, independence working correlation).
   Models 1, 2, 3 (3a) and 3b as defined in step 5. Nationwide row of S3 Table.
+  06b_nationwide_gee.do (Stata, run next in step 6) fits the same GEE for the nationwide
+  results that need the full covariance matrix or another model: the urban and rural annual
+  change in Model 3b (Table 2), the quadratic-year model (S1 Table, panel 1a) and the
+  nationwide predicted probabilities for Fig 2. Step 9 checks that its Model 3b estimates
+  and standard errors equal the ones written here.
 
   Outputs (output\models\):
     nationwide_gee.csv        URRU, year and interaction terms

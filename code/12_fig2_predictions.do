@@ -8,13 +8,19 @@
 * Run from the repository root (run_all.ps1 does this).
 * Inputs : data/derived/brfss_2018_2025_analytic.csv   (step 2)
 *          output/models/fig2_entities.do              (step 9: panel FIPS codes and names)
+*          output/models/fig2_nationwide_gee.csv       (step 6, 06b_nationwide_gee.do:
+*                                                       the nationwide panel)
 * Output : output/models/fig2_plotted_values.csv       (every value behind Fig 2, plus the
 *                                                       unadjusted prevalence column, prev,
 *                                                       which the figure no longer draws)
 *
 * Notes
-*   - Survey design: svyset _psu [pweight=_llcpwt], strata(_ststr). Single-PSU strata are
-*     treated as certainty units, matching PROC SURVEYLOGISTIC in the SAS models.
+*   - Nationwide panel: like every nationwide result, it comes from the survey-weighted
+*     GEE model clustered by state (06b_nationwide_gee.do, which uses the same margins
+*     command as below); its rows are copied from fig2_nationwide_gee.csv.
+*   - State panels: survey design svyset _psu [pweight=_llcpwt], strata(_ststr).
+*     Single-PSU strata are treated as certainty units, matching PROC SURVEYLOGISTIC in
+*     the SAS models.
 *   - The unadjusted prevalence and the predicted probabilities use the same complete-case
 *     analytic sample.
 *   - Fitted values are kept only for the years a state contributes data.
@@ -46,6 +52,19 @@ local row = 1
 foreach fips of local entity_fips {
     local entity_name : word `row' of `entity_names'
     di _n "{hline 70}" _n "`row'/`n_entities': `entity_name' (FIPS `fips')" _n "{hline 70}"
+
+    if `fips' == 0 {
+        * nationwide panel: the GEE values from step 6
+        import delimited "output/models/fig2_nationwide_gee.csv", clear asdouble
+        assert _N == 16 & fips == 0
+        list, noobs
+        forvalues i = 1/`=_N' {
+            post `pf' ("`entity_name'") (0) (year[`i']) (urru[`i']) ///
+                (pred[`i']) (lo[`i']) (hi[`i']) (prev[`i'])
+        }
+        local row = `row' + 1
+        continue
+    }
 
     use `cc', clear
     if `fips' != 0 keep if _state == `fips'
