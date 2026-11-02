@@ -6,6 +6,10 @@
     - Model 3b plus year squared only, with a Wald test of year squared (quad_year)
 
   Output: output\models\state_quadratic.csv (three tests per state, 129 rows)
+
+  Convergence: XCONV=1E-8 and MAXITER=100 in both MODEL statements, as in step 5 (see the
+  note there): the default relative gradient criterion (GCONV=1E-8) stops the iterations
+  before the estimates are fully converged.
 ==========================================================================*/
 options nosource nonotes;
 ods listing close; ods results off;
@@ -40,7 +44,7 @@ run;
             where _STATE = &st;
             class _AGE_G SEXVAR _RACEGR3 _EDUCAG / param=GLM;
             model currentsmoker (event='1') = URRU year_centered year_sq rural_x_year rural_x_yearsq
-                                              _AGE_G SEXVAR _RACEGR3 _EDUCAG;
+                                              _AGE_G SEXVAR _RACEGR3 _EDUCAG / xconv=1e-8 maxiter=100;
             weight _LLCPWT; strata _STSTR; cluster _PSU;
             quad_joint: test year_sq = 0, rural_x_yearsq = 0;
             quad_gap:   test rural_x_yearsq = 0;
@@ -51,7 +55,7 @@ run;
             where _STATE = &st;
             class _AGE_G SEXVAR _RACEGR3 _EDUCAG / param=GLM;
             model currentsmoker (event='1') = URRU year_centered year_sq rural_x_year
-                                              _AGE_G SEXVAR _RACEGR3 _EDUCAG;
+                                              _AGE_G SEXVAR _RACEGR3 _EDUCAG / xconv=1e-8 maxiter=100;
             weight _LLCPWT; strata _STSTR; cluster _PSU;
             quad_year:  test year_sq = 0;
             ods output TestStmts=ts2;

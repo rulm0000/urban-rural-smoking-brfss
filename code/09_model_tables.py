@@ -187,15 +187,18 @@ def interaction_table(pe, gs):
 def simple_slopes(pe, it, gs):
     """Urban slope = year_centered coefficient of Model 3b (urban is the reference level).
     Rural slope = ESTIMATE 'URRU=1' (year + interaction), checked against the coefficients.
-    The ESTIMATE 'URRU=0' row of simple_slopes.csv is not used: with PARAM=GLM, SAS fills in
-    the year_centered*URRU coefficients as 1/2 each, so that row is the average of the urban
-    and rural slopes, not the urban slope.
+    The ESTIMATE 'URRU=0' row of simple_slopes.csv is the urban slope (year_centered with the
+    year_centered*URRU coefficients given as 0 1, step 5) and is checked against the
+    year_centered coefficient.
     Nationwide row: the urban and rural slopes of the GEE Model 3b (step 6, Stata lincom)."""
     yc = pe[(pe.Variable == "year_centered") & (pe.Model == "3b") & (pe.State_Code != 0)].set_index("State_Code")
     ib = it.set_index("State_Code")
     sl = pd.read_csv(os.path.join(MODELS_DIR, "simple_slopes.csv"))
     for c in ("Estimate", "StdErr"):
         sl[c] = num(sl[c]).values
+    urb = sl[sl.Label.astype(str).str.contains("URRU=0") & (sl.State_Code != 0)].set_index("State_Code")
+    diff = (urb.Estimate - yc.Estimate).dropna().abs().max()
+    assert diff < 2e-3, "ESTIMATE 'URRU=0' does not equal the year_centered coefficient (max diff %g)" % diff
     rur = sl[sl.Label.astype(str).str.contains("URRU=1") & (sl.State_Code != 0)].set_index("State_Code")
     diff = (rur.Estimate - (yc.Estimate + ib.Estimate)).dropna().abs().max()
     assert diff < 2e-3, "rural slope does not equal year + interaction (max diff %g)" % diff

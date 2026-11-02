@@ -15,6 +15,23 @@
   Outputs (output\models\):
     state_params.csv   URRU, year_centered and year_centered*URRU estimates, entity x model
     simple_slopes.csv  ESTIMATE statements for the urban and rural annual change (Model 3b)
+
+  Convergence: every fit uses MODEL options XCONV=1E-8 MAXITER=100. With no convergence
+  option, SURVEYLOGISTIC stops at the relative gradient criterion GCONV=1E-8, which compares
+  the gradient with the whole log likelihood. For a parameter with little information in
+  these large samples (such as the urban-rural term in a state with few rural respondents)
+  that stops the Fisher scoring iterations one step early: the estimates were off by up to
+  5E-4 on the log-odds scale, enough to move a few confidence limits by 0.01 at two
+  decimals. A tighter GCONV only narrows this (1E-12 still left errors of 6E-6). XCONV=1E-8
+  instead requires that no parameter changed by more than 1E-8 (relative change for
+  parameters of 0.01 or more in absolute value) from the previous iteration; Fisher scoring
+  for the logistic model converges quadratically, so the estimates reported then are
+  converged to about 1E-15. Only XCONV is given: SURVEYLOGISTIC stops as soon as any one of
+  the criteria it is given (ABSFCONV, FCONV, GCONV, XCONV) is met, and the default GCONV
+  applies only when none is given. A fit that does not converge in 100 iterations writes a
+  WARNING to the log. (Checked by emulating the iterations in Python: the emulation with
+  the default criterion reproduces the earlier estimates to 1E-10, and XCONV=1E-8 needs 4 to
+  6 iterations instead of 2 to 4.)
 ==========================================================================*/
 options nosource nonotes;
 ods listing close; ods results off;
@@ -43,10 +60,24 @@ run;
     proc surveylogistic data=d;
         %if &ent ne 0 %then %do; where _STATE = &ent; %end;
         class URRU (ref='0') &cls / param=GLM;
-        model currentsmoker (event='1') = &model;
+        model currentsmoker (event='1') = &model / xconv=1e-8 maxiter=100;
         weight _LLCPWT; strata _STSTR; cluster _PSU;
         %if &slopes %then %do;
-            estimate "Year slope URRU=0" year_centered 1 / exp cl;
+            /* Annual change in the log odds for urban (URRU=0) and rural (URRU=1) residents.
+               Column order of year_centered*URRU: with PARAM=GLM, REF='0' puts level 0 at
+               the END of the URRU levels, so the order is URRU=1, URRU=0 (both for URRU and
+               for year_centered*URRU). The URRU=0 columns are the redundant ones, set to 0,
+               so year_centered is the urban slope and year_centered*URRU (URRU=1) is the
+               rural minus urban difference.
+               Each statement gives the year_centered*URRU coefficients explicitly. When an
+               ESTIMATE statement names year_centered but leaves out year_centered*URRU, SAS
+               fills in that higher-order effect with 1/2 for each URRU level, which gives
+               the average of the urban and rural slopes, not the urban slope.
+                 URRU=0: year_centered 1, year_centered*URRU 0 1 = year + interaction(URRU=0)
+                         = year (the urban slope)
+                 URRU=1: year_centered 1, year_centered*URRU 1 (the URRU=0 coefficient left
+                         out is 0) = year + interaction(URRU=1) (the rural slope) */
+            estimate "Year slope URRU=0" year_centered 1 year_centered*URRU 0 1 / exp cl;
             estimate "Year slope URRU=1" year_centered 1 year_centered*URRU 1 / exp cl;
             ods output Estimates=est;
         %end;

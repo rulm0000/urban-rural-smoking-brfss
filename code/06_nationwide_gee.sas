@@ -12,6 +12,15 @@
   Outputs (output\models\):
     nationwide_gee.csv        URRU, year and interaction terms
     nationwide_gee_full.csv   every parameter
+
+  Convergence: CONVERGE=1E-8 (default 1E-4) and MAXITER=100, both for the initial
+  generalized linear model fit (MODEL statement) and for the GEE iterations (REPEATED
+  statement). Like XCONV=1E-8 in the survey logistic models of steps 5, 7 and 8 (see the
+  note in step 5), it requires that no parameter changes by more than 1E-8 between
+  iterations (relative change for larger parameters), so the estimates are fully converged.
+  With an independence working correlation the GEE estimates are the weighted logistic
+  estimates; the default criterion already left them within about 1E-8 of the converged
+  values, so this changes them only in far decimal places.
 ==========================================================================*/
 options nosource nonotes;
 ods listing close; ods results off;
@@ -34,9 +43,9 @@ proc sort data=d; by _STATE; run;
 %macro gee(mnum=, cls=, model=);
     proc genmod data=d descending;
         class _STATE URRU(ref='0') &cls;
-        model currentsmoker = &model / dist=binomial link=logit;
+        model currentsmoker = &model / dist=binomial link=logit converge=1e-8 maxiter=100;
         weight _LLCPWT;
-        repeated subject=_STATE / type=ind;
+        repeated subject=_STATE / type=ind converge=1e-8 maxiter=100;
         ods output GEEEmpPEst=ge;
     run;
     data full_&mnum; length Model $3; set ge; Model="&mnum"; run;

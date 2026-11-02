@@ -33,7 +33,7 @@ Other options:
 - `-From 9` resumes from a later step.
 - `-SasExe` and `-StataExe` set the program paths if they are not found automatically.
 
-A full run takes about 20 minutes on a laptop, mostly the SAS models.
+A full run takes about 3 hours on a laptop (not counting the BRFSS download), most of it the SAS models in steps 5, 7 and 8 and the Stata GEE models in step 6.
 
 ## What each step does
 

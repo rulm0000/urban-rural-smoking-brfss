@@ -13,6 +13,10 @@
     year_fit.csv     fit statistics
     year_test.csv    Wald tests of the quadratic terms
     year_type3.csv   Type 3 tests, categorical-year model
+
+  Convergence: XCONV=1E-8 and MAXITER=100 in every MODEL statement, as in step 5 (see the
+  note there): the default relative gradient criterion (GCONV=1E-8) stops the iterations
+  before the estimates are fully converged.
 ==========================================================================*/
 options nosource nonotes;
 ods listing close; ods results off;
@@ -41,7 +45,7 @@ run;
 /* 1. LINEAR */
 proc surveylogistic data=d;
     class &COV / param=GLM;
-    model currentsmoker (event='1') = URRU year_centered rural_x_year &COV;
+    model currentsmoker (event='1') = URRU year_centered rural_x_year &COV / xconv=1e-8 maxiter=100;
     weight _LLCPWT; strata _STSTR; cluster _PSU;
     ods output ParameterEstimates=pe1 FitStatistics=fit1;
 run;
@@ -49,7 +53,8 @@ run;
 /* 2. QUADRATIC */
 proc surveylogistic data=d;
     class &COV / param=GLM;
-    model currentsmoker (event='1') = URRU year_centered year_sq rural_x_year rural_x_yearsq &COV;
+    model currentsmoker (event='1') = URRU year_centered year_sq rural_x_year rural_x_yearsq &COV
+                                      / xconv=1e-8 maxiter=100;
     weight _LLCPWT; strata _STSTR; cluster _PSU;
     quad_joint:  test year_sq = 0, rural_x_yearsq = 0;
     quad_gap:    test rural_x_yearsq = 0;
@@ -59,7 +64,7 @@ run;
 /* 3. CATEGORICAL year */
 proc surveylogistic data=d;
     class URRU (ref='0') year (ref='2018') &COV / param=GLM;
-    model currentsmoker (event='1') = URRU year URRU*year &COV;
+    model currentsmoker (event='1') = URRU year URRU*year &COV / xconv=1e-8 maxiter=100;
     weight _LLCPWT; strata _STSTR; cluster _PSU;
     ods output ParameterEstimates=pe3 FitStatistics=fit3 Type3=type3_3;
 run;
