@@ -20,10 +20,10 @@ fits of steps 5 and 7 have the same point estimates (the same weighted likelihoo
 reported; the step 7 quadratic fit is used as a check.
 
 Outputs (output/tables/):
-  Table2_trends_and_interaction.csv   Table 2: the urban-rural x year interaction (Model 3b) with
-                                      its BH-adjusted p-value, then the urban and rural annual
-                                      ORs; rows = nationwide + states with an interaction
-                                      BH-adjusted p-value < .05
+  Table2_trends_and_interaction.csv   Table 2: the urban and rural annual ORs, then the
+                                      urban-rural x year interaction (Model 3b) with its
+                                      BH-adjusted p-value; rows = nationwide + states with an
+                                      interaction BH-adjusted p-value < .05
   S3_Table_urban_rural_ORs.csv        S3 Table: urban-rural OR and 95% CI, Models 1, 2 and 3a;
                                       the "Model N BH-adjusted p-value < .05" Yes/No columns mark
                                       the states printed in bold
@@ -218,20 +218,26 @@ def simple_slopes(pe, it, gs):
     return t.set_index("State_Code")
 
 
+def p2(v):
+    """BH-adjusted p-value to two decimals, as in Table 2 (all values in the table are >= .005)."""
+    return "< .01" if v < .005 else ("%.2f" % v).lstrip("0")
+
+
 def table2(it, sl):
     """Rows: nationwide + the states whose interaction is significant after FDR adjustment.
-    Columns as in the Word table: the interaction first, then the urban and rural annual ORs."""
+    Columns as in the Word table: the urban and rural annual ORs, then the interaction.
+    Every value is shown to two decimals, the BH-adjusted p-value included."""
     keep = it[(it.State_Code == 0) | it.sig_BH].sort_values("State_Code")
     rows = []
     for _, x in keep.iterrows():
         s = sl.loc[x.State_Code]
         rows.append({
             "State": x.State,
-            "Urban-rural × year interaction OR": "%.3f" % x.OR,
-            "Urban-rural × year interaction 95% CI": ci(x.LowerCL_OR, x.UpperCL_OR, 3),
-            "BH-adjusted p-value": "–" if pd.isna(x.q_BH) else fmt_p(x.q_BH),
             "Urban OR": "%.2f" % s.Urban_OR, "Urban 95% CI": ci(s.Urban_LCL, s.Urban_UCL),
             "Rural OR": "%.2f" % s.Rural_OR, "Rural 95% CI": ci(s.Rural_LCL, s.Rural_UCL),
+            "Urban-rural × year interaction OR": "%.2f" % x.OR,
+            "Urban-rural × year interaction 95% CI": ci(x.LowerCL_OR, x.UpperCL_OR),
+            "BH-adjusted p-value": "–" if pd.isna(x.q_BH) else p2(x.q_BH),
         })
     pd.DataFrame(rows).to_csv(os.path.join(TABLES_DIR, "Table2_trends_and_interaction.csv"),
                               index=False, encoding="utf-8-sig")
