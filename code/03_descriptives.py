@@ -64,10 +64,10 @@ def table1(cc, n_all):
                          "Percentage": 100 * wsum / W,
                          "Smoking prevalence": 100 * (g["w"] * g["currentsmoker"]).sum() / wsum})
     t = pd.DataFrame(rows)
-    # Manuscript format: "2,619,997 (93.6%)" and "12.7%" (unweighted n, weighted %, one decimal)
+    # Manuscript format: "2,619,997" and "12.7%" (unweighted n; weighted prevalence, one decimal).
+    # The weighted percentages are in Table1_sample_characteristics_values.csv.
     pd.DataFrame({"Variable": t["Variable"], "Category": t["Category"],
-                  "Sample Size (%)": ["{:,} ({:.1f}%)".format(n, p)
-                                      for n, p in zip(t["Unweighted n"], t["Percentage"])],
+                  "Sample Size": ["{:,}".format(n) for n in t["Unweighted n"]],
                   "Smoking prevalence": ["{:.1f}%".format(p) for p in t["Smoking prevalence"]]}
                  ).to_csv(os.path.join(TABLES_DIR, "Table1_sample_characteristics.csv"), index=False,
                           encoding="utf-8-sig")
@@ -177,7 +177,7 @@ def s2_and_state_by_year(cc):
         r["Change in ratio"] = f"{d:+.2f}" if pd.notna(d) else "—"
         rows.append(r)
 
-    nat = {"State": "Nationwide (43 states)"}
+    nat = {"State": "Nationwide"}
     for yr in (2018, 2025):
         for urru, lab in ((1, "Rural"), (0, "Urban")):
             x = prev_ci(sub[(sub.year == yr) & (sub.URRU == urru)])

@@ -295,8 +295,8 @@ def s1_tables(gq):
     # Each test is its own family of 43 state-specific tests. The joint test is not in S1 Table;
     # it is kept for results_counts.txt.
     b, quad = [], {}
-    for lab, test in (("quad_year", "Year² (Model 3b + year²)"),
-                      ("quad_gap", "Rural × year² (Model 3b + year² + rural × year²)"),
+    for lab, test in (("quad_year", "Year²"),
+                      ("quad_gap", "Rural × year²"),
                       ("quad_joint", None)):
         x = q[q.Label == lab].copy()
         assert len(x) == 43, "%s: %d states" % (lab, len(x))
@@ -418,9 +418,8 @@ CAPTIONS = [
     ("Note. Panel 1a estimates are from survey-weighted generalized estimating equations with "
      "standard errors clustered by state. BH = Benjamini-Hochberg. Panel 1b p-values are "
      "BH-adjusted to control the false discovery rate across the 43 state-specific analyses. Only 5 of 43 states had "
-     "significant quadratic year terms after adjusting for the false discovery rate. No states "
-     "had significant urban-rural differences in the quadratic year term after adjusting for "
-     "false discovery rate."),
+     "significant year² terms after adjusting for the false discovery rate. No states had a "
+     "significant rural × year² term after adjusting for the false discovery rate."),
     "In the manuscript's Supporting information list:",
     ("S1 Table. Sensitivity analyses: quadratic specification of survey year, nationwide (1a) "
      "and within states (1b)"),
@@ -505,7 +504,8 @@ def captions(it, sl, quad, gq):
         % (wa.Rural_OR, wa.Rural_LCL, wa.Rural_UCL),
         "across the %d state-specific interaction tests" % n_int,
         "across the %d state-specific analyses" % len(quad["quad_year"]),
-        "Only %d of %d states had significant quadratic year terms" % (nq_year, len(quad["quad_year"])),
+        "Only %d of %d states had significant year² terms" % (nq_year, len(quad["quad_year"])),
+        "No states had a significant rural × year² term",
         "Note. Panel 1a estimates are from survey-weighted generalized estimating equations with "
         "standard errors clustered by state.",
         "%s, and %s are not included in the 2025 BRFSS data" % (", ".join(no2025[:-1]), no2025[-1]),
