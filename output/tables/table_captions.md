@@ -54,7 +54,7 @@ S1 Table. Sensitivity analyses: quadratic specification of survey year, nationwi
 
 ## S2 Table
 
-Table body: `S2_Table_state_prevalence.csv` (in the Word table the Nationwide row is bold)
+Table body: `S2_Table_state_prevalence.csv`
 
 In the supplement file:
 
